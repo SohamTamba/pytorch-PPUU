@@ -586,3 +586,6 @@ def normalize_inputs(images, states, stats, device='cuda'):
         images = images.to(device).unsqueeze(0)
         states = states.to(device).unsqueeze(0)
     return images, states
+
+def get_device():
+    return 'cuda' if torch.cuda.is_available() else 'cpu'

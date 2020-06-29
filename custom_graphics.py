@@ -42,6 +42,9 @@ def draw_dashed_line(surf, color, start_pos, end_pos, width=1, dash_length=10):
         end = origin + (slope * (index + 1) * dash_length)
         pygame.draw.line(surf, color, start.get(), end.get(), width)
 
+def draw_vert_line(surf, x, ht, color=(255, 255, 0), width=1):
+    pygame.draw.line(surf, color, Point((x, 0)).get(), Point((x, ht-1)).get(), width)
+
 
 def draw_text(screen, text, xy, font_size=30, colour=(255, 255, 255), font=None):
     if font is None:

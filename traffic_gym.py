@@ -9,7 +9,7 @@ import sys, pickle
 # from skimage import measure, transform
 # from matplotlib.image import imsave
 import PIL
-from custom_graphics import draw_dashed_line, draw_text, draw_rect
+from custom_graphics import draw_dashed_line, draw_text, draw_rect, draw_vert_line
 from gym import core, spaces
 import os
 from imageio import imwrite
@@ -65,7 +65,7 @@ class Car:
     SCALE = SCALE
     LANE_W = LANE_W
 
-    def __init__(self, lanes, free_lanes, dt, car_id, look_ahead, screen_w, font, policy_type, policy_network=None):
+    def __init__(self, lanes, free_lanes, dt, car_id, look_ahead, screen_w, font, policy_type, policy_network=None, is_circ_road=False):
         """
         Initialise a sedan on a random lane
         :param lanes: tuple of lanes, with ``min`` and ``max`` y coordinates
@@ -111,6 +111,8 @@ class Car:
         self.policy_network = policy_network
         self.is_controlled = False
         self.collisions_per_frame = 0
+
+        self.is_circ_road = is_circ_road
 
     @staticmethod
     def get_text(n, font):
@@ -526,6 +528,7 @@ class Car:
         elif object_name == 'ego_car_image' and self._ego_car_image is None:
             self._ego_car_image = self._get_observation_image(*object_)[0]
 
+    # TODO: Improve function name
     def get_last(self, n, done, norm_state=False, return_reward=False, gamma=0.99):
         if len(self._states_image) < n: return None  # no enough samples
         # n × (state_image, lane_cost, proximity_cost, frame) ->
@@ -609,8 +612,8 @@ class Car:
                 imwrite(f'{save_dir}/im{t:05d}.png', im[t].numpy())
 
     @property
-    def valid(self):
-        return self.back[0] > self.look_ahead and self.front[0] < self.screen_w - 1.75 * self.look_ahead
+    def valid(self): # TODO: Dont define the finish line in seperate locations (eg. current_lane). TODO remove is_controlled
+        return self.is_controlled or (self.back[0] > self.look_ahead and self.front[0] < self.screen_w) #- 1.75 * self.look_ahead
 
     def __repr__(self) -> str:
         cls = self.__class__
@@ -777,7 +780,7 @@ class Simulator(core.Env):
             if free_lanes:
                 car = self.EnvCar(self.lanes, free_lanes, self.delta_t, self.next_car_id,
                                   self.look_ahead, self.screen_size[0], self.font[20], policy_type=self.policy_type,
-                                  policy_network=self.policy_network)
+                                  is_circ_road=self.is_circ_road(), policy_network=self.policy_network)
                 self.next_car_id += 1
                 self.vehicles.append(car)
                 for l in car.get_lane_set(self.lanes):
@@ -973,6 +976,8 @@ class Simulator(core.Env):
 
             # extract states
             ego_surface = pygame.Surface(machine_screen_size)
+            #print(f"machine_screen_size = {machine_screen_size}")
+            #print(f"max_extension = {max_extension}")
             for i, v in enumerate(self.vehicles):
                 if (self.store or v.is_controlled) and v.valid:
                     # For every vehicle we want to extract the state, start with a black surface
@@ -982,6 +987,18 @@ class Simulator(core.Env):
                         vv.draw(vehicle_surface, mode=mode, offset=max_extension)
                     # Superimpose the lanes
                     vehicle_surface.blit(lane_surface, (0, 0), special_flags=pygame.BLEND_MAX)
+
+                    # Circular track
+                    rep_size  = np.array([max_extension, machine_screen_size[1]])
+                    rep_w = rep_size[0]
+                    machine_w = machine_screen_size[0]
+
+                    rep_surf = vehicle_surface.subsurface((rep_w, 0), rep_size).copy()
+                    vehicle_surface.blit(rep_surf, (machine_w - rep_w, 0))
+                    rep_surf = vehicle_surface.subsurface((machine_w-2*rep_w, 0), rep_size).copy()
+                    vehicle_surface.blit(rep_surf, (0, 0))
+
+
                     # Empty ego-surface
                     ego_surface.fill((0, 0, 0))
                     # Draw myself blue on the ego_surface
@@ -994,7 +1011,15 @@ class Simulator(core.Env):
                     if self.store_sim_video:
                         if self.ghost:
                             self.ghost.draw(vehicle_surface, mode='ghost', offset=max_extension)
+
+                        v.draw(vehicle_surface, mode='ego-car', offset=max_extension) # Show policy car before saving
+
+                        ht = machine_screen_size[1]
+                        draw_vert_line(vehicle_surface, max_extension, ht)
+                        draw_vert_line(vehicle_surface, machine_screen_size[0]-max_extension, ht)
+
                         v.frames.append(pygame.surfarray.array3d(vehicle_surface).transpose(1, 0, 2))  # flip x and y
+                        print(f"Appended! len(v.frames) = {len(v.frames)}")
 
             # # save surface as image, for visualisation only
             # pygame.image.save(vehicle_surface, "vehicle_surface.png")
@@ -1036,3 +1061,6 @@ class Simulator(core.Env):
 
     def _get_vehicle(self, id_):
         return self.vehicles[[v.id for v in self.vehicles].index(id_)]
+
+    def is_circ_road(self):
+        return False
