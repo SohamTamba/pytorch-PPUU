@@ -76,10 +76,19 @@ class I80Car(Car):
         self.collisions_per_frame = 0
 
         self.is_circ_road = is_circ_road
+        self.dist = 0
+        self.step_counter = 0
 
     @property
     def is_autonomous(self):
         return False
+
+    def step(self, action):
+        prev_x = self._position[0]
+        super().step(action)
+        self.dist += self._position[0]-prev_x
+
+        self.step_counter += 1
 
     def _get(self, what, k):
         direction_vector = self._trajectory[k + 1] - self._trajectory[k]
@@ -149,6 +158,7 @@ class I80Car(Car):
 
     def count_collisions(self, state):
         self.collisions_per_frame = 0
+
         # alpha = 1 * self.SCALE  # 1 m overlap collision
         # for cars in state:
         #     if cars:
@@ -165,8 +175,11 @@ class I80Car(Car):
         #                 # print(f'Collision {self.collisions_per_frame}/6, ahead, vehicle {ahead.id}')
 
         beta = 0.99
-        if self._states_image and self._states_image[-1][2] > beta:
+
+        if self.collision_score and self.collision_score > beta:
             self.collisions_per_frame += 1
+
+
             # print(f'Collision registered for vehicle {self}')
             # print(f'Accident! Check vehicle {self}. Proximity of {self._states_image[-1][2]}.')
 
@@ -386,7 +399,6 @@ class I80(Simulator):
                         (self.controlled_car['v_id'] is None or vehicle_id == self.controlled_car['v_id']):
                     self.controlled_car['locked'] = car
 
-                    car.reps = self.control_reps
                     car.is_controlled = True
                     car.buffer_size = self.nb_states
                     car.lanes = self.lanes
@@ -405,7 +417,6 @@ class I80(Simulator):
             print(f'\r[t={self.frame}]', end='')
 
         for v in self.vehicles[:]:
-
             if v.off_screen:
                 # print(f'vehicle {v.id} [off screen]')
                 if self.state_image and self.store:
@@ -415,13 +426,9 @@ class I80(Simulator):
                 self.vehicles.remove(v)
             else:
                 # Insort it in my vehicle list
-
                 lane_idx = v.current_lane
-                
                 assert v.current_lane < self.nb_lanes, f'{v} is in lane {v.current_lane} at frame {self.frame}'
-
                 bisect.insort(self.lane_occupancy[lane_idx], v)
-
 
         if self.state_image or self.controlled_car and self.controlled_car['locked']:
             # How much to look far ahead
@@ -433,6 +440,30 @@ class I80(Simulator):
             print(f"look_ahead = {self.controlled_car['locked'].look_ahead}")
             self.render(mode='machine', width_height=(2 * look_ahead, 2 * look_sideways), scale=0.25)
             print("stop rendering")
+
+        def remove_nearest_cars(v):
+            remain_area = v._length*v._width
+            print(f"remain_area = {remain_area}")
+            while remain_area > 0.0:
+
+                closest = None
+                closest_dist = np.Inf
+                for vv in self.vehicles:
+                    if vv.is_controlled:
+                        continue
+
+                    dist = np.linalg.norm(v._position - vv._position)
+                    if dist < closest_dist:
+                        closest = vv
+                        closest_dist = dist
+
+                remain_area -= closest._length*closest._width
+                self.vehicles.remove(closest)
+                print(f"Removed {closest}")
+
+                # No background cars left
+                if closest is None:
+                    return
 
         for v in self.vehicles:
 
@@ -452,6 +483,11 @@ class I80(Simulator):
 
             # Perform such action
             v.step(action)
+            len_road = v.screen_w - 1.75*v.look_ahead
+            if v.is_autonomous and v.is_circ_road and v._position[0] > len_road:
+                print(f"{v} Looped outside current_lane!")
+                v._position[0] -= len_road
+                remove_nearest_cars(v)
 
             # When extension + screen_length crossed, return to extension
 
@@ -579,6 +615,3 @@ class I80(Simulator):
 
             self._lane_surfaces[mode] = surface.copy()
             # pygame.image.save(surface, "i80-machine.png")
-
-    def is_circ_road(self):
-        return False

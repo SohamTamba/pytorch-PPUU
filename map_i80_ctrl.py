@@ -7,27 +7,23 @@ class ControlledI80Car(I80Car):
     get_lane_set = PatchedCar.get_lane_set
 
     def __init__(self, df, y_offset, look_ahead, screen_w, is_circ_road, font=None, kernel=0, dt=1/10):
-        super().__init__(df, y_offset, look_ahead, screen_w, font, kernel, dt)
+        super().__init__(df, y_offset, look_ahead, screen_w, font, kernel, dt, is_circ_road)
         self.is_controlled = False
         self.buffer_size = 0
         self.lanes = None
         self.arrived_to_dst = False  # arrived to destination
         self.frames = list()
 
+    # TODO: Fix this
     @property
     def current_lane(self):
         # If following the I-80 trajectories
         if not self.is_controlled or len(self._states_image) < self.buffer_size:
             return super().current_lane
 
-        if self.is_circ_road:
-            while self._position[0] > self.screen_w:
-
-                print(f"{self} is looped!")
-                self._position[0] -= self.screen_w
-
+        x_max = self.screen_w - 1.75*self.look_ahead
         x = self._position[0]
-        if x > self.screen_w:# - 1.75 * self.look_ahead:
+        if x > x_max:
             self.off_screen = True
             self.arrived_to_dst = True
         #print(f"{self}.off_screen = {self.off_screen}")
@@ -71,10 +67,9 @@ class ControlledI80(I80):
     EnvCar = ControlledI80Car
 
     def __init__(self, **kwargs):
-        self.control_reps = None
         super().__init__(**kwargs)
 
-    def reset(self, mode="straight", **kwargs):
+    def reset(self, mode="circular", **kwargs):
         super().reset(**kwargs)
         if mode in ["straight", "circular"]:
             self.mode = mode
@@ -85,6 +80,3 @@ class ControlledI80(I80):
         while observation is None:
             observation, reward, done, info = self.step()
         return observation
-
-    def is_circular_road(self):
-        return self.mode == "circular"

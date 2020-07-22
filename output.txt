@@ -1,0 +1,1017 @@
+[loading data shard: traffic-data/state-action-cost/data_i80_v0/trajectories-0400-0415/all_data.pth]
+Number of episodes: 1216
+[loading data splits: traffic-data/state-action-cost/data_i80_v0/splits.pth]
+[loading data stats: traffic-data/state-action-cost/data_i80_v0/data_stats.pth]
+[loading car sizes: traffic-data/state-action-cost/data_i80_v0/car_sizes.pth]
+Building the environment (loading data, if any)
+pygame 2.0.0.dev10 (SDL 2.0.12, python 3.8.3)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+[saving to models/planning_results/bprop-zdropout=0.5-rollouts=10-rollout_length=30-lrt=0.1-niter=5-ureg=0.0-uhinge=1.0-n_dropout=10-abuffer=1-saveoptstats=1-lambdal=0.0-lambdao=0.0-]
+Loading trajectories from traffic-data/xy-trajectories/i80/trajectories-0400-0415.txt
+start rendering
+valid = True
+back = 3.4705864648648657
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.5552631578947373
+Appended! len(v.frames) = 1
+stop rendering
+start rendering
+valid = True
+back = 7.440697081081041
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.5552631578947373
+Appended! len(v.frames) = 2
+stop rendering
+start rendering
+valid = True
+back = 11.330339119802485
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.6815789473684202
+Appended! len(v.frames) = 3
+stop rendering
+start rendering
+valid = True
+back = 15.130044129150317
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.5552631578947373
+Appended! len(v.frames) = 4
+stop rendering
+start rendering
+valid = True
+back = 18.870496025582398
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.58616220141043
+Appended! len(v.frames) = 5
+stop rendering
+start rendering
+valid = True
+back = 22.531548753433885
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.4937575810829656
+Appended! len(v.frames) = 6
+stop rendering
+start rendering
+valid = True
+back = 26.092002862641287
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.6283329511847245
+Appended! len(v.frames) = 7
+stop rendering
+start rendering
+valid = True
+back = 29.545933045279845
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.5302092221989668
+Appended! len(v.frames) = 8
+stop rendering
+start rendering
+valid = True
+back = 32.87319323900739
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.42471872481494616
+Appended! len(v.frames) = 9
+stop rendering
+start rendering
+valid = True
+back = 36.017295480764766
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.42894736842105274
+Appended! len(v.frames) = 10
+stop rendering
+start rendering
+valid = True
+back = 39.06093078974656
+look_ahead = 234.23423423423424
+collision_score = 0.42894736842105274
+Real collision_score = 0.42894736842105274
+Appended! len(v.frames) = 11
+stop rendering
+start rendering
+valid = True
+back = 42.036095789145435
+look_ahead = 234.23423423423424
+collision_score = 0.42894736842105274
+Real collision_score = 0.42894736842105274
+Appended! len(v.frames) = 12
+stop rendering
+start rendering
+valid = True
+back = 44.963331594945714
+look_ahead = 234.23423423423424
+collision_score = 0.42894736842105274
+Real collision_score = 0.42894736842105274
+Appended! len(v.frames) = 13
+stop rendering
+start rendering
+valid = True
+back = 47.84197983798191
+look_ahead = 234.23423423423424
+collision_score = 0.5552631578947373
+Real collision_score = 0.5552631578947373
+Appended! len(v.frames) = 14
+stop rendering
+start rendering
+valid = True
+back = 50.68915809147838
+look_ahead = 234.23423423423424
+collision_score = 0.5552631578947373
+Real collision_score = 0.5552631578947373
+Appended! len(v.frames) = 15
+stop rendering
+start rendering
+valid = True
+back = 53.500916187328464
+look_ahead = 234.23423423423424
+collision_score = 0.5552631578947373
+Real collision_score = 0.5552631578947373
+Appended! len(v.frames) = 16
+stop rendering
+start rendering
+valid = True
+back = 56.26145319145519
+look_ahead = 234.23423423423424
+collision_score = 0.5552631578947373
+Real collision_score = 0.5552631578947373
+Appended! len(v.frames) = 17
+stop rendering
+start rendering
+valid = True
+back = 58.9576018516268
+look_ahead = 234.23423423423424
+collision_score = 0.5552631578947373
+Real collision_score = 0.5552631578947373
+Appended! len(v.frames) = 18
+stop rendering
+start rendering
+valid = True
+back = 61.599106047428876
+look_ahead = 234.23423423423424
+collision_score = 0.5552631578947373
+Real collision_score = 0.5552631578947373
+Appended! len(v.frames) = 19
+stop rendering
+start rendering
+valid = True
+back = 64.15475913580131
+look_ahead = 234.23423423423424
+collision_score = 0.5552631578947373
+Real collision_score = 0.5552631578947373
+Appended! len(v.frames) = 20
+stop rendering
+___________________________________________________________
+cntr = 0
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 21
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 21
+len(env._state_images) = 21
+len(images) = 1
+___________________________________________________________
+cntr = 1
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 22
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 22
+len(env._state_images) = 22
+len(images) = 2
+___________________________________________________________
+cntr = 2
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 23
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 23
+len(env._state_images) = 23
+len(images) = 3
+___________________________________________________________
+cntr = 3
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 24
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 24
+len(env._state_images) = 24
+len(images) = 4
+___________________________________________________________
+cntr = 4
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 25
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 25
+len(env._state_images) = 25
+len(images) = 5
+___________________________________________________________
+cntr = 5
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 26
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 26
+len(env._state_images) = 26
+len(images) = 6
+___________________________________________________________
+cntr = 6
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 27
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 27
+len(env._state_images) = 27
+len(images) = 7
+___________________________________________________________
+cntr = 7
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 28
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 28
+len(env._state_images) = 28
+len(images) = 8
+___________________________________________________________
+cntr = 8
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 29
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 29
+len(env._state_images) = 29
+len(images) = 9
+___________________________________________________________
+cntr = 9
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 30
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 30
+len(env._state_images) = 30
+len(images) = 10
+___________________________________________________________
+cntr = 10
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 31
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 31
+len(env._state_images) = 31
+len(images) = 11
+___________________________________________________________
+cntr = 11
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 32
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 32
+len(env._state_images) = 32
+len(images) = 12
+___________________________________________________________
+cntr = 12
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 33
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 33
+len(env._state_images) = 33
+len(images) = 13
+___________________________________________________________
+cntr = 13
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 34
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 34
+len(env._state_images) = 34
+len(images) = 14
+___________________________________________________________
+cntr = 14
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 35
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 35
+len(env._state_images) = 35
+len(images) = 15
+___________________________________________________________
+cntr = 15
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.01371764529095822
+Real collision_score = 0.01371764529095822
+Appended! len(v.frames) = 36
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 36
+len(env._state_images) = 36
+len(images) = 16
+___________________________________________________________
+cntr = 16
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.04316653518163785
+Real collision_score = 0.8078947368421048
+Appended! len(v.frames) = 37
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 37
+len(env._state_images) = 37
+len(images) = 17
+___________________________________________________________
+cntr = 17
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.13151320485367757
+Real collision_score = 0.39454712799128433
+Appended! len(v.frames) = 38
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 38
+len(env._state_images) = 38
+len(images) = 18
+___________________________________________________________
+cntr = 18
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.1763157894736853
+Real collision_score = 0.1763157894736853
+Appended! len(v.frames) = 39
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 39
+len(env._state_images) = 39
+len(images) = 19
+___________________________________________________________
+cntr = 19
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.1763157894736853
+Real collision_score = 0.1763157894736853
+Appended! len(v.frames) = 40
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 40
+len(env._state_images) = 40
+len(images) = 20
+___________________________________________________________
+cntr = 20
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.05000000000000071
+Real collision_score = 0.05000000000000071
+Appended! len(v.frames) = 41
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 41
+len(env._state_images) = 41
+len(images) = 21
+___________________________________________________________
+cntr = 21
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.1763157894736853
+Real collision_score = 0.1763157894736853
+Appended! len(v.frames) = 42
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 42
+len(env._state_images) = 42
+len(images) = 22
+___________________________________________________________
+cntr = 22
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.1763157894736853
+Real collision_score = 0.1763157894736853
+Appended! len(v.frames) = 43
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 43
+len(env._state_images) = 43
+len(images) = 23
+___________________________________________________________
+cntr = 23
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.1763157894736853
+Real collision_score = 0.1763157894736853
+Appended! len(v.frames) = 44
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 44
+len(env._state_images) = 44
+len(images) = 24
+___________________________________________________________
+cntr = 24
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.05000000000000071
+Real collision_score = 0.05000000000000071
+Appended! len(v.frames) = 45
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 45
+len(env._state_images) = 45
+len(images) = 25
+___________________________________________________________
+cntr = 25
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.05000000000000071
+Real collision_score = 0.05000000000000071
+Appended! len(v.frames) = 46
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 46
+len(env._state_images) = 46
+len(images) = 26
+___________________________________________________________
+cntr = 26
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 47
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 47
+len(env._state_images) = 47
+len(images) = 27
+___________________________________________________________
+cntr = 27
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 48
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 48
+len(env._state_images) = 48
+len(images) = 28
+___________________________________________________________
+cntr = 28
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 49
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 49
+len(env._state_images) = 49
+len(images) = 29
+___________________________________________________________
+cntr = 29
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 50
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 50
+len(env._state_images) = 50
+len(images) = 30
+___________________________________________________________
+cntr = 30
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.003890078515346392
+Real collision_score = 0.003890078515346392
+Appended! len(v.frames) = 51
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 51
+len(env._state_images) = 51
+len(images) = 31
+___________________________________________________________
+cntr = 31
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.02059243397573199
+Real collision_score = 0.02059243397573199
+Appended! len(v.frames) = 52
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 52
+len(env._state_images) = 52
+len(images) = 32
+___________________________________________________________
+cntr = 32
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.04564596716631062
+Real collision_score = 0.04564596716631062
+Appended! len(v.frames) = 53
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 53
+len(env._state_images) = 53
+len(images) = 33
+___________________________________________________________
+cntr = 33
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.05000000000000071
+Real collision_score = 0.05000000000000071
+Appended! len(v.frames) = 54
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 54
+len(env._state_images) = 54
+len(images) = 34
+___________________________________________________________
+cntr = 34
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.05000000000000071
+Real collision_score = 0.05000000000000071
+Appended! len(v.frames) = 55
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 55
+len(env._state_images) = 55
+len(images) = 35
+___________________________________________________________
+cntr = 35
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.05000000000000071
+Real collision_score = 0.05000000000000071
+Appended! len(v.frames) = 56
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 56
+len(env._state_images) = 56
+len(images) = 36
+___________________________________________________________
+cntr = 36
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 57
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 57
+len(env._state_images) = 57
+len(images) = 37
+___________________________________________________________
+cntr = 37
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 58
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 58
+len(env._state_images) = 58
+len(images) = 38
+___________________________________________________________
+cntr = 38
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 59
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 59
+len(env._state_images) = 59
+len(images) = 39
+___________________________________________________________
+cntr = 39
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 60
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 60
+len(env._state_images) = 60
+len(images) = 40
+___________________________________________________________
+cntr = 40
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 61
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 61
+len(env._state_images) = 61
+len(images) = 41
+___________________________________________________________
+cntr = 41
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 62
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 62
+len(env._state_images) = 62
+len(images) = 42
+___________________________________________________________
+cntr = 42
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 63
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 63
+len(env._state_images) = 63
+len(images) = 43
+___________________________________________________________
+cntr = 43
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 64
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 64
+len(env._state_images) = 64
+len(images) = 44
+___________________________________________________________
+cntr = 44
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 65
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 65
+len(env._state_images) = 65
+len(images) = 45
+___________________________________________________________
+cntr = 45
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 66
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 66
+len(env._state_images) = 66
+len(images) = 46
+___________________________________________________________
+cntr = 46
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 67
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 67
+len(env._state_images) = 67
+len(images) = 47
+___________________________________________________________
+cntr = 47
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 68
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 68
+len(env._state_images) = 68
+len(images) = 48
+___________________________________________________________
+cntr = 48
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 69
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 69
+len(env._state_images) = 69
+len(images) = 49
+___________________________________________________________
+cntr = 49
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 70
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 70
+len(env._state_images) = 70
+len(images) = 50
+___________________________________________________________
+cntr = 50
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 1.0
+Appended! len(v.frames) = 71
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 71
+len(env._state_images) = 71
+len(images) = 51
+___________________________________________________________
+cntr = 51
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 1.0
+Appended! len(v.frames) = 72
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 72
+len(env._state_images) = 72
+len(images) = 52
+___________________________________________________________
+cntr = 52
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 1.0
+Appended! len(v.frames) = 73
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 73
+len(env._state_images) = 73
+len(images) = 53
+___________________________________________________________
+cntr = 53
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 1.0
+Appended! len(v.frames) = 74
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 74
+len(env._state_images) = 74
+len(images) = 54
+___________________________________________________________
+cntr = 54
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 75
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 75
+len(env._state_images) = 75
+len(images) = 55
+___________________________________________________________
+cntr = 55
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 76
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 76
+len(env._state_images) = 76
+len(images) = 56
+___________________________________________________________
+cntr = 56
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 77
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 77
+len(env._state_images) = 77
+len(images) = 57
+___________________________________________________________
+cntr = 57
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 78
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 78
+len(env._state_images) = 78
+len(images) = 58
+___________________________________________________________
+cntr = 58
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 79
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 79
+len(env._state_images) = 79
+len(images) = 59
+___________________________________________________________
+cntr = 59
+start rendering
+valid = True
+back = 66.64457550947593
+look_ahead = 234.23423423423424
+collision_score = 0.0
+Real collision_score = 0.0
+Appended! len(v.frames) = 80
+stop rendering
+Loc = [66.64457551 53.47355025]
+len(info.frames) = 80
+len(env._state_images) = 80
+len(images) = 60
+___________________________________________________________
+done = False, it_limit = 60, cntr = 60
+[saving movie to models/planning_results/videos_simulator/bprop-zdropout=0.5-rollouts=10-rollout_length=30-lrt=0.1-niter=5-ureg=0.0-uhinge=1.0-n_dropout=10-abuffer=1-saveoptstats=1-lambdal=0.0-lambdao=0.0-/ep1/ego]
+len(info.frames) = 80
+[saving simulator movie to models/planning_results/videos_simulator/bprop-zdropout=0.5-rollouts=10-rollout_length=30-lrt=0.1-niter=5-ureg=0.0-uhinge=1.0-n_dropout=10-abuffer=1-saveoptstats=1-lambdal=0.0-lambdao=0.0-/ep1/sim]
+ep:   1/1 | time: 60 | distance: 0 | success: 0 | mean time: 60 | mean distance: 0 | mean success: 0.000
+avg time travelled per second is 3.159263905694748

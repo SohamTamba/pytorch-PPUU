@@ -37,12 +37,16 @@ def process_one_episode(opt,
     images, states, costs, actions, mu_list, std_list, grad_list = [], [], [], [], [], [], []
     cntr = 0
     # inputs, cost, done, info = env.step(numpy.zeros((2,)))
-    input_state_t0 = inputs['state'].contiguous()[-1]
+    dist_t0 = env.controlled_car['locked'].dist
+    #input_state_t0 = inputs['state'].contiguous()[-1]
     cost_sequence, action_sequence, state_sequence = [], [], []
     has_collided = False
     off_screen = False
 
-    env.controlled_car["locked"]._speed = 400.0
+    # Hardcode the state
+    env.controlled_car["locked"]._speed = 0.0#400.0
+    env.controlled_car["locked"]._position[1] -= 20.0#400.0
+    env.controlled_car["locked"]._direction[0], env.controlled_car["locked"]._direction[1] = 1.0, 0.0
 
     it_limit = 60 #Avoid excess disk useage due to control flow bug
     while not done and cntr < it_limit:
@@ -76,11 +80,16 @@ def process_one_episode(opt,
         std_list.append(std)
 
         print(f"len(info.frames) = {len(info.frames)}")
+        print(f"len(env._state_images) = {len(env.controlled_car['locked']._states_image)}")
+        print(f"len(images) = {len(images)}")
+
 
     print("___________________________________________________________")
     print(f"done = {done}, it_limit = {it_limit}, cntr = {cntr}")
     
-    input_state_tfinal = inputs['state'][-1]
+    dist_tfinal = env.controlled_car['locked'].dist
+    #input_state_tfinal = inputs['state'][-1]
+
 
     if mu is not None:
         mu_list = numpy.stack(mu_list)
@@ -115,7 +124,7 @@ def process_one_episode(opt,
 
     returned = eval_policy.SimulationResult()
     returned.time_travelled = len(images)
-    returned.distance_travelled = input_state_tfinal[0] - input_state_t0[0]
+    returned.distance_travelled = dist_tfinal - dist_t0 #input_state_tfinal[0] - input_state_t0[0]
     returned.road_completed = 1 if cost['arrived_to_dst'] else 0
     returned.off_screen = off_screen
     returned.has_collided = has_collided
