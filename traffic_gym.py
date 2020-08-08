@@ -266,6 +266,8 @@ class Car:
             return draw_rect(surface, colours['b'], rectangle, d)
         if mode == 'ghost':
             return draw_rect(surface, colours['y'], rectangle, d)
+        if mode == 'abrupt_ignore':
+            return draw_rect(surface, colours['w'], rectangle, d)
 
     def step(self, action):  # takes also the parameter action = state temporal derivative
         """
@@ -613,7 +615,7 @@ class Car:
 
     @property
     def valid(self): # TODO: Dont define the finish line in seperate locations (eg. current_lane)
-        return (self.back[0] > self.look_ahead and self.front[0] < self.screen_w - 1.75 * self.look_ahead) or self.is_circ_road
+        return (self.back[0] > self.look_ahead and self.front[0] < self.screen_w - 1.75 * self.look_ahead)
 
     def __repr__(self) -> str:
         cls = self.__class__
@@ -908,52 +910,6 @@ class Simulator(core.Env):
 
     def render(self, mode='human', width_height=None, scale=1.):
 
-        def draw_vehicle_surf(surf, v, vehicles):
-            #start with a black surface
-            surf.fill((0, 0, 0))
-            # Draw all the other vehicles (in green)
-            for vv in set(vehicles) - {v}:
-                vv.draw(surf, mode=mode, offset=max_extension)
-                    # Superimpose the lanes
-            surf.blit(lane_surface, (0, 0), special_flags=pygame.BLEND_MAX)
-
-
-            if self.is_circ_road():
-                machine_w = machine_screen_size[0]
-                copy_size = max_extension
-                dst = machine_w-max_extension-1.75*v.look_ahead
-
-                # Starting points of copies
-                left_copy_to = dst
-                right_copy_to = 0
-                left_copy_from = max_extension
-                right_copy_from = dst-copy_size
-
-                ht  = machine_screen_size[1]
-                #right_rep_w = max_extension # Width of the portion on the right that is repeated
-                #left_rep_w = max_extension + 1.75*v.look_ahead # Width of the portion on the leftt that is repeated
-
-                rep_surf = surf.subsurface((left_copy_from, 0), (copy_size, ht)).copy() # Copy portion on left
-                surf.blit(rep_surf, (left_copy_to, 0))
-
-                rep_surf = surf.subsurface((right_copy_from, 0), (copy_size, ht)).copy() #  Copy portion on right
-                surf.blit(rep_surf, (right_copy_to, 0))
-
-                            # Fix this up later
-        def store_collision_score(v, objects):
-
-            if not v.is_circ_road:
-                v.collision_score = v._states_image[-1][2]
-                return
-
-            surf = objects[1]
-
-            filtered_vehicles = [vv for vv in self.vehicles if vv.step_counter > 10]
-            draw_vehicle_surf(surf, v, filtered_vehicles)
-            tmp = v._get_observation_image(*objects)
-            v.collision_score = tmp[2]
-
-
         if mode == 'human' and self.display:
 
             # if self.frame % 1000 == 0:
@@ -1007,6 +963,7 @@ class Simulator(core.Env):
             machine_screen_size = np.array(self.screen_size) + 2 * max_extension
             vehicle_surface = pygame.Surface(machine_screen_size)
 
+
             # draw lanes
             try:
                 lane_surface = self._lane_surfaces[mode]
@@ -1027,8 +984,33 @@ class Simulator(core.Env):
             for i, v in enumerate(self.vehicles):
                 if (self.store or v.is_controlled) and v.valid:
                     # For every vehicle we want to extract the state
+                            
+                    #start with a black surface
+                    vehicle_surface.fill((0, 0, 0))
+                    # Draw all the other vehicles (in green)
+                    for vv in set(self.vehicles) - {v}:
+                        if not vv.abrupt_ignore:
+                            vv.draw(vehicle_surface, mode=mode, offset=max_extension)
+                    vehicle_surface.blit(lane_surface, (0, 0), special_flags=pygame.BLEND_MAX)
 
-                    draw_vehicle_surf(vehicle_surface, v, self.vehicles)
+
+                    if self.is_circ_road():
+                        machine_w = machine_screen_size[0]
+                        copy_size = max_extension
+                        dst = machine_w-max_extension-v.look_ahead
+                        ht  = machine_screen_size[1]
+
+                        # Starting points of copies
+                        left_copy_to = dst
+                        right_copy_to = 0
+                        left_copy_from = max_extension
+                        right_copy_from = dst-copy_size
+
+                        rep_surf = vehicle_surface.subsurface((left_copy_from, 0), (copy_size, ht)).copy() # Copy portion on left
+                        vehicle_surface.blit(rep_surf, (left_copy_to, 0))
+
+                        rep_surf = vehicle_surface.subsurface((right_copy_from, 0), (copy_size, ht)).copy() #  Copy portion on right
+                        vehicle_surface.blit(rep_surf, (right_copy_to, 0))
 
                     # Empty ego-surface
                     ego_surface.fill((0, 0, 0))
@@ -1036,14 +1018,9 @@ class Simulator(core.Env):
                     ego_rect = v.draw(ego_surface, mode='ego-car', offset=max_extension)
                     # Add me on top of others without shadowing
                     # vehicle_surface.blit(ego_surface, ego_rect, ego_rect, special_flags=pygame.BLEND_MAX)
+
                     v.store('state_image', (max_extension, vehicle_surface, width_height, scale, self.frame))
                     v.store('ego_car_image', (max_extension, ego_surface, width_height, scale, self.frame))
-
-                    store_collision_score(v, (max_extension, vehicle_surface.copy(), width_height, scale, self.frame))
-
-
-                    print(f"collision_score = {v.collision_score}")
-                    print(f"Real collision_score = {v._states_image[-1][2]}")
 
                     # Store whole history, if requested
                     if self.store_sim_video:
@@ -1052,20 +1029,13 @@ class Simulator(core.Env):
 
                         v.draw(vehicle_surface, mode='ego-car', offset=max_extension) # Show policy car before saving
 
+                        for vv in self.vehicles:
+                            if vv.abrupt_ignore:
+                                vv.draw(vehicle_surface, mode='abrupt_ignore', offset=max_extension)
+
+
 
                         if self.is_circ_road():
-
-                            machine_w = machine_screen_size[0]
-                            copy_size = max_extension
-                            dst = machine_w-max_extension-1.75*v.look_ahead
-
-                            # Starting points of copies
-                            left_copy_to = dst
-                            right_copy_to = 0
-                            left_copy_from = max_extension
-                            right_copy_from = dst-copy_size
-
-                            ht  = machine_screen_size[1]
 
                             color_left = (255, 255, 0)
                             draw_vert_line(vehicle_surface, left_copy_from, ht, color_left)
@@ -1080,7 +1050,6 @@ class Simulator(core.Env):
                             draw_vert_line(vehicle_surface, right_copy_to+copy_size, ht, color_right, dashed=True)
 
                         v.frames.append(pygame.surfarray.array3d(vehicle_surface).transpose(1, 0, 2))  # flip x and y
-                        print(f"Appended! len(v.frames) = {len(v.frames)}")
                     
 
             # # save surface as image, for visualisation only

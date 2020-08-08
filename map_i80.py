@@ -78,6 +78,7 @@ class I80Car(Car):
         self.is_circ_road = is_circ_road
         self.dist = 0
         self.step_counter = 0
+        self.abrupt_ignore = False
 
     @property
     def is_autonomous(self):
@@ -174,14 +175,27 @@ class I80Car(Car):
         #                 self.collisions_per_frame += 1
         #                 # print(f'Collision {self.collisions_per_frame}/6, ahead, vehicle {ahead.id}')
 
-        beta = 0.99
+        if len(self._states_image) == 0:
+            return
 
-        if self.collision_score and self.collision_score > beta:
+        collision_score = self._states_image[-1][2]
+        collision_threshhold = 0.99
+
+        if collision_score > collision_threshhold:
             self.collisions_per_frame += 1
 
 
             # print(f'Collision registered for vehicle {self}')
-            # print(f'Accident! Check vehicle {self}. Proximity of {self._states_image[-1][2]}.')
+            # print(f'Accident! Check vehicle {self}. Proximity of {collision_score}.')
+
+    def is_circ_road(self):
+        return self.is_circ_road
+
+    def is_visible(self, c_v, v):
+        return False
+
+    def is_emerging(self):
+        return self.back[0] < 0
 
 
 class I80(Simulator):
@@ -327,6 +341,9 @@ class I80(Simulator):
         self._t_slot = self._time_slots[time_slot] if time_slot is not None else self.random.choice(self._time_slots)
         self.df = self._get_data_frame(self._t_slot, self.screen_size[0], self.X_OFFSET)
         self.max_frame = max(self.df['Frame ID'])
+        self.min_frame = min(self.df['Frame ID'])
+        print(f"max(self.df['Frame ID']) = {max(self.df['Frame ID'])}")
+        print(f"min(self.df['Frame ID']) = {min(self.df['Frame ID'])}")
         if vehicle_id: frame = self._get_first_frame(vehicle_id)
         if frame is None:  # controlled
             # Start at a random valid (new_vehicles is not empty) initial frame
@@ -366,7 +383,7 @@ class I80(Simulator):
     #     return {
     #         'frame': frame,
     #         'cars': cars,
-    #     }
+    #     } 
 
     def step(self, policy_action=None):
 
@@ -392,6 +409,8 @@ class I80(Simulator):
                 #print(f"self.smoothing_window = {self.smoothing_window}")
                 car = self.EnvCar(car_df, self.offset, self.look_ahead, self.screen_size[0], font=f, kernel=self.smoothing_window,
                                   dt=self.delta_t, is_circ_road=self.is_circ_road())
+                car.abrupt_ignore = self.is_in_view(car)
+
                 self.vehicles.append(car)
                 if self.controlled_car and \
                         not self.controlled_car['locked'] and \
@@ -434,36 +453,38 @@ class I80(Simulator):
             # How much to look far ahead
             look_ahead = MAX_SPEED * 1000 / 3600 * self.SCALE
             look_sideways = 2 * self.LANE_W
-            print("start rendering")
-            print(f"valid = {self.controlled_car['locked'].valid}")
-            print(f"back = {self.controlled_car['locked'].back[0]}")
-            print(f"look_ahead = {self.controlled_car['locked'].look_ahead}")
             self.render(mode='machine', width_height=(2 * look_ahead, 2 * look_sideways), scale=0.25)
-            print("stop rendering")
 
-        def remove_nearest_cars(v):
-            remain_area = v._length*v._width
-            print(f"remain_area = {remain_area}")
-            while remain_area > 0.0:
+        for v in self.vehicles:
+            # Sample an action based on the current state
+            action = v.policy() if not v.is_autonomous else policy_action
+            # Perform such action
+            v.step(action, self)
 
-                closest = None
-                closest_dist = np.Inf
-                for vv in self.vehicles:
-                    if vv.is_controlled:
-                        continue
+        # Determine which cars are still abrupt
+        for v in self.vehicles:
+            # Try avoid running is_in_view for performance
+            if not v.is_emerging() and not v.abrupt_ignore:
+                continue
+            in_view = self.is_in_view(v)
+            if v.is_emerging() and in_view:
+                v.abrupt_ignore = True
+            if v.abrupt_ignore and not in_view:
+                v.abrupt_ignore = False
 
-                    dist = np.linalg.norm(v._position - vv._position)
-                    if dist < closest_dist:
-                        closest = vv
-                        closest_dist = dist
-
-                remain_area -= closest._length*closest._width
-                self.vehicles.remove(closest)
-                print(f"Removed {closest}")
-
-                # No background cars left
-                if closest is None:
-                    return
+        # Remove cars to ensure a possible path
+        if self.controlled_car['locked'] and self.controlled_car['locked'].removal_budget > 0:
+            c_car = self.controlled_car['locked']
+            # Sort by closeness
+            sorted_vehicles = sorted(self.vehicles, key=lambda v: np.square(v._position-c_car._position).sum())
+            for v in sorted_vehicles:
+                if not v.is_controlled:
+                    v_area = v._width*v._length
+                    # ToDo: Make it a ghost car
+                    self.vehicles.remove(v)
+                    self.controlled_car['locked'].removal_budget -= v_area
+                    if self.controlled_car['locked'].removal_budget < 0:
+                        break
 
         for v in self.vehicles:
 
@@ -476,24 +497,14 @@ class I80(Simulator):
                 if lane_idx < 5 or lane_idx == 5 and v.front[0] > 18 * LANE_W else None
             state = left_vehicles, mid_vehicles, right_vehicles
 
-            # Sample an action based on the current state
-            action = v.policy() if not v.is_autonomous else policy_action
-            if v.is_autonomous: #REMOVE
-                print(f"Loc = {v._position}")
 
-            # Perform such action
-            v.step(action)
-            len_road = v.screen_w - 1.75*v.look_ahead
-            if v.is_autonomous and v.is_circ_road and v._position[0] > len_road:
-                print(f"{v} Looped outside current_lane!")
-                v._position[0] -= len_road
-                remove_nearest_cars(v)
 
             # When extension + screen_length crossed, return to extension
 
 
             # Store state and action pair
             if (self.store or v.is_controlled) and v.valid:
+
                 v.store('state', state)
                 v.store('action', action)
 
@@ -525,9 +536,20 @@ class I80(Simulator):
             if self.ghost: self.ghost.step(self.ghost.policy())
 
         self.frame += int(self.delta_t * 10)
-
         # Run out of frames?
-        self.done = self.frame >= self.max_frame or self.user_is_done
+        out_of_frames = False
+
+        if self.frame >= self.max_frame:
+            if not self.is_circ_road():
+                out_of_frames = True
+            else:
+                self.reset_frame(self.min_frame)
+                # If all frames were seen
+                if self.controlled_car['locked'] and\
+                    self.controlled_car['locked'].step_counter > (self.max_frame - self.min_frame)/(self.delta_t * 10):
+                    out_of_frames = True
+
+        self.done = out_of_frames or self.user_is_done
 
         if self.controlled_car and self.controlled_car['locked']:
             return_ = self.controlled_car['locked'].get_last(
@@ -541,6 +563,17 @@ class I80(Simulator):
 
         # return observation, reward, done, info
         return None, None, self.done, None
+
+    def reset_frame(self, frame_no):
+        self.frame = frame_no
+        vehicles = []
+        for v in self.vehicles:
+            if v.is_controlled:
+                v.removal_budget = v._width*v._length
+                vehicles.append(v)
+        self.vehicles = vehicles
+        self.vehicles_history = set(vehicles)
+
 
     def _draw_lanes(self, surface, mode='human', offset=0):
 

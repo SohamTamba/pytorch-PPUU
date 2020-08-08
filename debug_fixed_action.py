@@ -44,17 +44,22 @@ def process_one_episode(opt,
     off_screen = False
 
     # Hardcode the state
-    env.controlled_car["locked"]._speed = 0.0#400.0
-    env.controlled_car["locked"]._position[1] -= 20.0#400.0
-    env.controlled_car["locked"]._direction[0], env.controlled_car["locked"]._direction[1] = 1.0, 0.0
+    cntr_car = env.controlled_car["locked"]
+    cntr_car._speed = 400.0
+    cntr_car._direction[0], cntr_car._direction[1] = 1.0, 0.0
 
     it_limit = 60 #Avoid excess disk useage due to control flow bug
     while not done and cntr < it_limit:
-        print("___________________________________________________________")
+        print("_"*50)
         print(f"cntr = {cntr}")
+        print(f"cntr_car = {cntr_car}")
+        print(f"cntr_car.step_counter = {cntr_car.step_counter}")
+        print(f"cntr_car.is_auto = {cntr_car.is_autonomous}")
 
         input_images = inputs['context'].contiguous()
         input_states = inputs['state'].contiguous()
+
+        print(f"len(input_images) = {len(input_images)}")
 
         a = [0.0, 0.0] # No acceleration/steering
         
@@ -79,12 +84,14 @@ def process_one_episode(opt,
         mu_list.append(mu)
         std_list.append(std)
 
+        print(f"cntr_car.off_screen = {cntr_car.off_screen}")
+        print(f"cntr_car.arrived_to_dst = {cntr_car.arrived_to_dst}")
         print(f"len(info.frames) = {len(info.frames)}")
         print(f"len(env._state_images) = {len(env.controlled_car['locked']._states_image)}")
         print(f"len(images) = {len(images)}")
 
 
-    print("___________________________________________________________")
+    print("_"*50)
     print(f"done = {done}, it_limit = {it_limit}, cntr = {cntr}")
     
     dist_tfinal = env.controlled_car['locked'].dist

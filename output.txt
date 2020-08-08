@@ -8,1010 +8,1927 @@ pygame 2.0.0.dev10 (SDL 2.0.12, python 3.8.3)
 Hello from the pygame community. https://www.pygame.org/contribute.html
 [saving to models/planning_results/bprop-zdropout=0.5-rollouts=10-rollout_length=30-lrt=0.1-niter=5-ureg=0.0-uhinge=1.0-n_dropout=10-abuffer=1-saveoptstats=1-lambdal=0.0-lambdao=0.0-]
 Loading trajectories from traffic-data/xy-trajectories/i80/trajectories-0400-0415.txt
+max(self.df['Frame ID']) = 9858
+min(self.df['Frame ID']) = 110
+self.frame = 5436
 start rendering
-valid = True
+valid = False
 back = 3.4705864648648657
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.5552631578947373
-Appended! len(v.frames) = 1
 stop rendering
+self.frame = 5437
 start rendering
-valid = True
+valid = False
 back = 7.440697081081041
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.5552631578947373
-Appended! len(v.frames) = 2
 stop rendering
+self.frame = 5438
 start rendering
-valid = True
+valid = False
 back = 11.330339119802485
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.6815789473684202
-Appended! len(v.frames) = 3
 stop rendering
+self.frame = 5439
 start rendering
-valid = True
+valid = False
 back = 15.130044129150317
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.5552631578947373
-Appended! len(v.frames) = 4
 stop rendering
+self.frame = 5440
 start rendering
-valid = True
+valid = False
 back = 18.870496025582398
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.58616220141043
-Appended! len(v.frames) = 5
 stop rendering
+self.frame = 5441
 start rendering
-valid = True
+valid = False
 back = 22.531548753433885
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.4937575810829656
-Appended! len(v.frames) = 6
 stop rendering
+self.frame = 5442
 start rendering
-valid = True
+valid = False
 back = 26.092002862641287
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.6283329511847245
-Appended! len(v.frames) = 7
 stop rendering
+self.frame = 5443
 start rendering
-valid = True
+valid = False
 back = 29.545933045279845
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.5302092221989668
-Appended! len(v.frames) = 8
 stop rendering
+self.frame = 5444
 start rendering
-valid = True
+valid = False
 back = 32.87319323900739
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.42471872481494616
-Appended! len(v.frames) = 9
 stop rendering
+self.frame = 5445
 start rendering
-valid = True
+valid = False
 back = 36.017295480764766
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.42894736842105274
-Appended! len(v.frames) = 10
 stop rendering
+self.frame = 5446
 start rendering
-valid = True
+valid = False
 back = 39.06093078974656
 look_ahead = 234.23423423423424
-collision_score = 0.42894736842105274
-Real collision_score = 0.42894736842105274
-Appended! len(v.frames) = 11
 stop rendering
+self.frame = 5447
 start rendering
-valid = True
+valid = False
 back = 42.036095789145435
 look_ahead = 234.23423423423424
-collision_score = 0.42894736842105274
-Real collision_score = 0.42894736842105274
-Appended! len(v.frames) = 12
 stop rendering
+self.frame = 5448
 start rendering
-valid = True
+valid = False
 back = 44.963331594945714
 look_ahead = 234.23423423423424
-collision_score = 0.42894736842105274
-Real collision_score = 0.42894736842105274
-Appended! len(v.frames) = 13
 stop rendering
+self.frame = 5449
 start rendering
-valid = True
+valid = False
 back = 47.84197983798191
 look_ahead = 234.23423423423424
-collision_score = 0.5552631578947373
-Real collision_score = 0.5552631578947373
-Appended! len(v.frames) = 14
 stop rendering
+self.frame = 5450
 start rendering
-valid = True
+valid = False
 back = 50.68915809147838
 look_ahead = 234.23423423423424
-collision_score = 0.5552631578947373
-Real collision_score = 0.5552631578947373
-Appended! len(v.frames) = 15
 stop rendering
+self.frame = 5451
 start rendering
-valid = True
+valid = False
 back = 53.500916187328464
 look_ahead = 234.23423423423424
-collision_score = 0.5552631578947373
-Real collision_score = 0.5552631578947373
-Appended! len(v.frames) = 16
 stop rendering
+self.frame = 5452
 start rendering
-valid = True
+valid = False
 back = 56.26145319145519
 look_ahead = 234.23423423423424
-collision_score = 0.5552631578947373
-Real collision_score = 0.5552631578947373
-Appended! len(v.frames) = 17
 stop rendering
+self.frame = 5453
 start rendering
-valid = True
+valid = False
 back = 58.9576018516268
 look_ahead = 234.23423423423424
-collision_score = 0.5552631578947373
-Real collision_score = 0.5552631578947373
-Appended! len(v.frames) = 18
 stop rendering
+self.frame = 5454
 start rendering
-valid = True
+valid = False
 back = 61.599106047428876
 look_ahead = 234.23423423423424
-collision_score = 0.5552631578947373
-Real collision_score = 0.5552631578947373
-Appended! len(v.frames) = 19
 stop rendering
+self.frame = 5455
 start rendering
-valid = True
+valid = False
 back = 64.15475913580131
 look_ahead = 234.23423423423424
-collision_score = 0.5552631578947373
-Real collision_score = 0.5552631578947373
-Appended! len(v.frames) = 20
 stop rendering
-___________________________________________________________
-cntr = 0
+self.frame = 5456
 start rendering
-valid = True
+valid = False
 back = 66.64457550947593
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
+stop rendering
+self.frame = 5457
+start rendering
+valid = False
+back = 69.08764786286285
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5458
+start rendering
+valid = False
+back = 71.50030367047114
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5459
+start rendering
+valid = False
+back = 73.88030451901764
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5460
+start rendering
+valid = False
+back = 76.23989601233265
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5461
+start rendering
+valid = False
+back = 78.57631321577729
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5462
+start rendering
+valid = False
+back = 80.87770508706743
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5463
+start rendering
+valid = False
+back = 83.13419616112962
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5464
+start rendering
+valid = False
+back = 85.35223852158136
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5465
+start rendering
+valid = False
+back = 87.51589981824034
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5466
+start rendering
+valid = False
+back = 89.62807724276536
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5467
+start rendering
+valid = False
+back = 91.71247044158282
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5468
+start rendering
+valid = False
+back = 93.76170652403073
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5469
+start rendering
+valid = False
+back = 95.78750454170924
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5470
+start rendering
+valid = False
+back = 97.78788960407667
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5471
+start rendering
+valid = False
+back = 99.7662851576515
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5472
+start rendering
+valid = False
+back = 101.73098663935117
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5473
+start rendering
+valid = False
+back = 103.68528590520664
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5474
+start rendering
+valid = False
+back = 105.637741725141
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5475
+start rendering
+valid = False
+back = 107.57755696046334
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5476
+start rendering
+valid = False
+back = 109.50749652956208
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5477
+start rendering
+valid = False
+back = 111.43809468975418
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5478
+start rendering
+valid = False
+back = 113.38646889905607
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5479
+start rendering
+valid = False
+back = 115.33642326363145
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5480
+start rendering
+valid = False
+back = 117.2113237632134
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5481
+start rendering
+valid = False
+back = 119.1329679702101
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5482
+start rendering
+valid = False
+back = 121.1394105975753
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5483
+start rendering
+valid = False
+back = 123.26830968799356
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5484
+start rendering
+valid = False
+back = 125.52256211977858
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5485
+start rendering
+valid = False
+back = 127.90677635557458
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5486
+start rendering
+valid = False
+back = 130.4184506293269
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5487
+start rendering
+valid = False
+back = 133.00438903044454
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5488
+start rendering
+valid = False
+back = 135.7270043688112
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5489
+start rendering
+valid = False
+back = 138.84933266191882
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5490
+start rendering
+valid = False
+back = 141.99212164888704
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5491
+start rendering
+valid = False
+back = 145.02245444381182
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5492
+start rendering
+valid = False
+back = 147.92209184589822
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5493
+start rendering
+valid = False
+back = 150.67630824823925
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5494
+start rendering
+valid = False
+back = 153.30319649506853
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5495
+start rendering
+valid = False
+back = 155.88004881460947
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5496
+start rendering
+valid = False
+back = 158.28638386840467
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5497
+start rendering
+valid = False
+back = 160.47651085215955
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5498
+start rendering
+valid = False
+back = 162.43028379641925
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5499
+start rendering
+valid = False
+back = 164.13664219190292
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5500
+start rendering
+valid = False
+back = 165.59347937093963
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5501
+start rendering
+valid = False
+back = 166.80019342305854
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5502
+start rendering
+valid = False
+back = 167.80225014582183
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5503
+start rendering
+valid = False
+back = 168.53331256289525
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5504
+start rendering
+valid = False
+back = 168.86518478290543
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5505
+start rendering
+valid = False
+back = 169.08697828467663
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5506
+start rendering
+valid = False
+back = 169.39040319868005
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5507
+start rendering
+valid = False
+back = 169.81849148044887
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5508
+start rendering
+valid = False
+back = 170.3842706123028
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5509
+start rendering
+valid = False
+back = 171.08835370692495
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5510
+start rendering
+valid = False
+back = 171.93149226872364
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5511
+start rendering
+valid = False
+back = 172.91313685887366
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5512
+start rendering
+valid = False
+back = 174.03505719248392
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5513
+start rendering
+valid = False
+back = 175.3027504504569
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5514
+start rendering
+valid = False
+back = 176.65480945264906
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5515
+start rendering
+valid = False
+back = 178.16361200914707
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5516
+start rendering
+valid = False
+back = 179.8546242477544
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5517
+start rendering
+valid = False
+back = 181.7434960929824
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5518
+start rendering
+valid = False
+back = 183.83829327943906
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5519
+start rendering
+valid = False
+back = 186.09425689192136
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5520
+start rendering
+valid = False
+back = 188.4476609313885
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5521
+start rendering
+valid = False
+back = 190.8821718610035
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5522
+start rendering
+valid = False
+back = 193.38844457037197
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5523
+start rendering
+valid = False
+back = 195.97793484173908
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5524
+start rendering
+valid = False
+back = 198.61930511132465
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5525
+start rendering
+valid = False
+back = 201.3330960243973
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5526
+start rendering
+valid = False
+back = 204.13945363719066
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5527
+start rendering
+valid = False
+back = 207.05128209297814
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5528
+start rendering
+valid = False
+back = 210.06765967249962
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5529
+start rendering
+valid = False
+back = 213.2517895734715
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5530
+start rendering
+valid = False
+back = 216.53138303987143
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5531
+start rendering
+valid = False
+back = 219.8776039170294
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5532
+start rendering
+valid = False
+back = 223.27149085145126
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5533
+start rendering
+valid = False
+back = 226.71554548692876
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5534
+start rendering
+valid = False
+back = 230.15867845743398
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5535
+start rendering
+valid = False
+back = 233.66159126284978
+look_ahead = 234.23423423423424
+stop rendering
+self.frame = 5536
+start rendering
+valid = True
+back = 237.23903117981376
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 1
+stop rendering
+self.frame = 5537
+start rendering
+valid = True
+back = 240.90561409981893
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 2
+stop rendering
+self.frame = 5538
+start rendering
+valid = True
+back = 244.65264959452333
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 3
+stop rendering
+self.frame = 5539
+start rendering
+valid = True
+back = 248.51213434344155
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 4
+stop rendering
+self.frame = 5540
+start rendering
+valid = True
+back = 252.46365895561345
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 5
+stop rendering
+self.frame = 5541
+start rendering
+valid = True
+back = 256.48813077046407
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 6
+stop rendering
+self.frame = 5542
+start rendering
+valid = True
+back = 260.56895889793157
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 7
+stop rendering
+self.frame = 5543
+start rendering
+valid = True
+back = 264.710883583628
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 8
+stop rendering
+self.frame = 5544
+start rendering
+valid = True
+back = 268.897577304162
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 9
+stop rendering
+self.frame = 5545
+start rendering
+valid = True
+back = 273.1325952427847
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 10
+stop rendering
+self.frame = 5546
+start rendering
+valid = True
+back = 277.43239659725015
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 11
+stop rendering
+self.frame = 5547
+start rendering
+valid = True
+back = 281.808436973906
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 12
+stop rendering
+self.frame = 5548
+start rendering
+valid = True
+back = 286.25531775491885
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 13
+stop rendering
+self.frame = 5549
+start rendering
+valid = True
+back = 290.83887573723155
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 14
+stop rendering
+self.frame = 5550
+start rendering
+valid = True
+back = 295.43797120828236
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 15
+stop rendering
+self.frame = 5551
+start rendering
+valid = True
+back = 300.0607679424593
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 16
+stop rendering
+self.frame = 5552
+start rendering
+valid = True
+back = 304.701998984579
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 17
+stop rendering
+self.frame = 5553
+start rendering
+valid = True
+back = 309.39603115253243
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 18
+stop rendering
+self.frame = 5554
+start rendering
+valid = True
+back = 314.15418841796844
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 19
+stop rendering
+self.frame = 5555
+start rendering
+valid = True
+back = 318.877583924589
+look_ahead = 234.23423423423424
+Appended! len(v.frames) = 20
+stop rendering
+self.frame = 5556
+__________________________________________________
+cntr = 0
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 120
+cntr_car.is_auto = False
+len(input_images) = 20
+start rendering
+valid = True
+back = 323.5940007449234
+look_ahead = 234.23423423423424
 Appended! len(v.frames) = 21
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 5557
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 21
 len(env._state_images) = 21
 len(images) = 1
-___________________________________________________________
+__________________________________________________
 cntr = 1
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 121
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 363.5940007449234
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 22
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 5558
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 22
 len(env._state_images) = 22
 len(images) = 2
-___________________________________________________________
+__________________________________________________
 cntr = 2
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 122
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 403.55404070496337
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 23
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 5559
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 23
 len(env._state_images) = 23
 len(images) = 3
-___________________________________________________________
+__________________________________________________
 cntr = 3
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 123
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 443.51404074492336
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 24
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 5560
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 24
 len(env._state_images) = 24
 len(images) = 4
-___________________________________________________________
+__________________________________________________
 cntr = 4
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 124
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 483.4740407449633
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 25
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 5561
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 25
 len(env._state_images) = 25
 len(images) = 5
-___________________________________________________________
+__________________________________________________
 cntr = 5
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 125
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 523.4340407449633
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 26
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 5562
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 26
 len(env._state_images) = 26
 len(images) = 6
-___________________________________________________________
+__________________________________________________
 cntr = 6
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 126
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 563.3940407449634
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 27
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 5563
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 27
 len(env._state_images) = 27
 len(images) = 7
-___________________________________________________________
+__________________________________________________
 cntr = 7
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 127
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 603.3540407449634
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 28
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 5564
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 28
 len(env._state_images) = 28
 len(images) = 8
-___________________________________________________________
+__________________________________________________
 cntr = 8
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 128
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 643.3140407449634
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 29
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 5565
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 29
 len(env._state_images) = 29
 len(images) = 9
-___________________________________________________________
+__________________________________________________
 cntr = 9
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 129
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 683.2740407449635
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 30
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 5566
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 30
 len(env._state_images) = 30
 len(images) = 10
-___________________________________________________________
+__________________________________________________
 cntr = 10
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 130
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 723.2340407449635
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 31
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4445
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 31
 len(env._state_images) = 31
 len(images) = 11
-___________________________________________________________
+__________________________________________________
 cntr = 11
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 131
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 763.1940407449636
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 32
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4446
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 32
 len(env._state_images) = 32
 len(images) = 12
-___________________________________________________________
+__________________________________________________
 cntr = 12
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 132
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 803.1540407449636
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 33
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4447
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 33
 len(env._state_images) = 33
 len(images) = 13
-___________________________________________________________
+__________________________________________________
 cntr = 13
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 133
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 843.1140407449636
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 34
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4448
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 34
 len(env._state_images) = 34
 len(images) = 14
-___________________________________________________________
+__________________________________________________
 cntr = 14
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 134
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 883.0740407449637
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 35
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4449
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 35
 len(env._state_images) = 35
 len(images) = 15
-___________________________________________________________
+__________________________________________________
 cntr = 15
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 135
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 923.0340407449637
 look_ahead = 234.23423423423424
-collision_score = 0.01371764529095822
-Real collision_score = 0.01371764529095822
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 36
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4450
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 36
 len(env._state_images) = 36
 len(images) = 16
-___________________________________________________________
+__________________________________________________
 cntr = 16
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 136
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 962.9940407449637
 look_ahead = 234.23423423423424
-collision_score = 0.04316653518163785
-Real collision_score = 0.8078947368421048
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 37
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4451
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 37
 len(env._state_images) = 37
 len(images) = 17
-___________________________________________________________
+__________________________________________________
 cntr = 17
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 137
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1002.9540407449638
 look_ahead = 234.23423423423424
-collision_score = 0.13151320485367757
-Real collision_score = 0.39454712799128433
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 38
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4452
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 38
 len(env._state_images) = 38
 len(images) = 18
-___________________________________________________________
+__________________________________________________
 cntr = 18
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 138
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1042.9140407449638
 look_ahead = 234.23423423423424
-collision_score = 0.1763157894736853
-Real collision_score = 0.1763157894736853
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 39
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4453
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 39
 len(env._state_images) = 39
 len(images) = 19
-___________________________________________________________
+__________________________________________________
 cntr = 19
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 139
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1082.8740407449638
 look_ahead = 234.23423423423424
-collision_score = 0.1763157894736853
-Real collision_score = 0.1763157894736853
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 40
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4454
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 40
 len(env._state_images) = 40
 len(images) = 20
-___________________________________________________________
+__________________________________________________
 cntr = 20
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 140
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1122.8340407449639
 look_ahead = 234.23423423423424
-collision_score = 0.05000000000000071
-Real collision_score = 0.05000000000000071
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 41
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4455
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 41
 len(env._state_images) = 41
 len(images) = 21
-___________________________________________________________
+__________________________________________________
 cntr = 21
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 141
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1162.794040744964
 look_ahead = 234.23423423423424
-collision_score = 0.1763157894736853
-Real collision_score = 0.1763157894736853
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 42
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4456
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 42
 len(env._state_images) = 42
 len(images) = 22
-___________________________________________________________
+__________________________________________________
 cntr = 22
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 142
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1202.754040744964
 look_ahead = 234.23423423423424
-collision_score = 0.1763157894736853
-Real collision_score = 0.1763157894736853
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 43
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4457
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 43
 len(env._state_images) = 43
 len(images) = 23
-___________________________________________________________
+__________________________________________________
 cntr = 23
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 143
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1242.714040744964
 look_ahead = 234.23423423423424
-collision_score = 0.1763157894736853
-Real collision_score = 0.1763157894736853
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 44
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4458
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 44
 len(env._state_images) = 44
 len(images) = 24
-___________________________________________________________
+__________________________________________________
 cntr = 24
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 144
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1282.674040744964
 look_ahead = 234.23423423423424
-collision_score = 0.05000000000000071
-Real collision_score = 0.05000000000000071
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 45
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4459
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 45
 len(env._state_images) = 45
 len(images) = 25
-___________________________________________________________
+__________________________________________________
 cntr = 25
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 145
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1322.634040744964
 look_ahead = 234.23423423423424
-collision_score = 0.05000000000000071
-Real collision_score = 0.05000000000000071
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 46
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4460
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 46
 len(env._state_images) = 46
 len(images) = 26
-___________________________________________________________
+__________________________________________________
 cntr = 26
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 146
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1362.594040744964
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 47
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4461
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 47
 len(env._state_images) = 47
 len(images) = 27
-___________________________________________________________
+__________________________________________________
 cntr = 27
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 147
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1402.5540407449641
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 48
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4462
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 48
 len(env._state_images) = 48
 len(images) = 28
-___________________________________________________________
+__________________________________________________
 cntr = 28
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 148
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1442.5140407449642
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 49
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4463
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 49
 len(env._state_images) = 49
 len(images) = 29
-___________________________________________________________
+__________________________________________________
 cntr = 29
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 149
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1482.4740407449642
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 50
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4464
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 50
 len(env._state_images) = 50
 len(images) = 30
-___________________________________________________________
+__________________________________________________
 cntr = 30
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 150
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1522.4340407449642
 look_ahead = 234.23423423423424
-collision_score = 0.003890078515346392
-Real collision_score = 0.003890078515346392
 Appended! len(v.frames) = 51
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4465
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 51
 len(env._state_images) = 51
 len(images) = 31
-___________________________________________________________
+__________________________________________________
 cntr = 31
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 151
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1562.3940407449643
 look_ahead = 234.23423423423424
-collision_score = 0.02059243397573199
-Real collision_score = 0.02059243397573199
 Appended! len(v.frames) = 52
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4466
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 52
 len(env._state_images) = 52
 len(images) = 32
-___________________________________________________________
+__________________________________________________
 cntr = 32
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 152
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1602.3540407449643
 look_ahead = 234.23423423423424
-collision_score = 0.04564596716631062
-Real collision_score = 0.04564596716631062
 Appended! len(v.frames) = 53
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4467
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 53
 len(env._state_images) = 53
 len(images) = 33
-___________________________________________________________
+__________________________________________________
 cntr = 33
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 153
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1642.3140407449644
 look_ahead = 234.23423423423424
-collision_score = 0.05000000000000071
-Real collision_score = 0.05000000000000071
 Appended! len(v.frames) = 54
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4468
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 54
 len(env._state_images) = 54
 len(images) = 34
-___________________________________________________________
+__________________________________________________
 cntr = 34
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 154
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1682.2740407449644
 look_ahead = 234.23423423423424
-collision_score = 0.05000000000000071
-Real collision_score = 0.05000000000000071
 Appended! len(v.frames) = 55
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4469
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 55
 len(env._state_images) = 55
 len(images) = 35
-___________________________________________________________
+__________________________________________________
 cntr = 35
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 155
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1722.2340407449644
 look_ahead = 234.23423423423424
-collision_score = 0.05000000000000071
-Real collision_score = 0.05000000000000071
 Appended! len(v.frames) = 56
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4470
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 56
 len(env._state_images) = 56
 len(images) = 36
-___________________________________________________________
+__________________________________________________
 cntr = 36
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 156
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1762.1940407449645
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 57
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4471
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 57
 len(env._state_images) = 57
 len(images) = 37
-___________________________________________________________
+__________________________________________________
 cntr = 37
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 157
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 1802.1540407449645
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 58
 stop rendering
-Loc = [66.64457551 53.47355025]
+map_i80_ctrl.ControlledI80Car.1793 Looped!
+self.frame = 4472
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 58
 len(env._state_images) = 58
 len(images) = 38
-___________________________________________________________
+__________________________________________________
 cntr = 38
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 158
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 36.34827497919878
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 59
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4473
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 59
 len(env._state_images) = 59
 len(images) = 39
-___________________________________________________________
+__________________________________________________
 cntr = 39
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 159
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 76.30827497919879
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 60
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4474
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 60
 len(env._state_images) = 60
 len(images) = 40
-___________________________________________________________
+__________________________________________________
 cntr = 40
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 160
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 116.2682749791988
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 61
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4475
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 61
 len(env._state_images) = 61
 len(images) = 41
-___________________________________________________________
+__________________________________________________
 cntr = 41
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 161
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 156.2282749791988
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 62
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4476
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 62
 len(env._state_images) = 62
 len(images) = 42
-___________________________________________________________
+__________________________________________________
 cntr = 42
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 162
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 196.1882749791988
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 63
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4477
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 63
 len(env._state_images) = 63
 len(images) = 43
-___________________________________________________________
+__________________________________________________
 cntr = 43
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 163
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 236.14827497919882
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 64
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4478
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 64
 len(env._state_images) = 64
 len(images) = 44
-___________________________________________________________
+__________________________________________________
 cntr = 44
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 164
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 276.1082749791988
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
+IGNOREDIGNOREDIGNOREDIGNOREDIGNORED
 Appended! len(v.frames) = 65
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4479
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 65
 len(env._state_images) = 65
 len(images) = 45
-___________________________________________________________
+__________________________________________________
 cntr = 45
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 165
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 316.0682749791988
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 66
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4480
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 66
 len(env._state_images) = 66
 len(images) = 46
-___________________________________________________________
+__________________________________________________
 cntr = 46
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 166
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 356.02827497919884
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 67
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4481
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 67
 len(env._state_images) = 67
 len(images) = 47
-___________________________________________________________
+__________________________________________________
 cntr = 47
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 167
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 395.9882749791989
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 68
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4482
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 68
 len(env._state_images) = 68
 len(images) = 48
-___________________________________________________________
+__________________________________________________
 cntr = 48
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 168
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 435.9482749791989
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 69
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4483
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 69
 len(env._state_images) = 69
 len(images) = 49
-___________________________________________________________
+__________________________________________________
 cntr = 49
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 169
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 475.90827497919895
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 70
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4484
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 70
 len(env._state_images) = 70
 len(images) = 50
-___________________________________________________________
+__________________________________________________
 cntr = 50
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 170
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 515.868274979199
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 1.0
 Appended! len(v.frames) = 71
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4485
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 71
 len(env._state_images) = 71
 len(images) = 51
-___________________________________________________________
+__________________________________________________
 cntr = 51
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 171
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 555.828274979199
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 1.0
 Appended! len(v.frames) = 72
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4486
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 72
 len(env._state_images) = 72
 len(images) = 52
-___________________________________________________________
+__________________________________________________
 cntr = 52
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 172
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 595.7882749791991
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 1.0
 Appended! len(v.frames) = 73
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4487
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 73
 len(env._state_images) = 73
 len(images) = 53
-___________________________________________________________
+__________________________________________________
 cntr = 53
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 173
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 635.7482749791991
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 1.0
 Appended! len(v.frames) = 74
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4488
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 74
 len(env._state_images) = 74
 len(images) = 54
-___________________________________________________________
+__________________________________________________
 cntr = 54
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 174
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 675.7082749791991
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 75
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4489
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 75
 len(env._state_images) = 75
 len(images) = 55
-___________________________________________________________
+__________________________________________________
 cntr = 55
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 175
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 715.6682749791992
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 76
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4490
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 76
 len(env._state_images) = 76
 len(images) = 56
-___________________________________________________________
+__________________________________________________
 cntr = 56
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 176
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 755.6282749791992
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 77
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4491
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 77
 len(env._state_images) = 77
 len(images) = 57
-___________________________________________________________
+__________________________________________________
 cntr = 57
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 177
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 795.5882749791992
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 78
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4492
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 78
 len(env._state_images) = 78
 len(images) = 58
-___________________________________________________________
+__________________________________________________
 cntr = 58
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 178
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 835.5482749791993
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 79
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4493
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 79
 len(env._state_images) = 79
 len(images) = 59
-___________________________________________________________
+__________________________________________________
 cntr = 59
+cntr_car = map_i80_ctrl.ControlledI80Car.1793
+cntr_car.step_counter = 179
+cntr_car.is_auto = True
+len(input_images) = 20
 start rendering
 valid = True
-back = 66.64457550947593
+back = 875.5082749791993
 look_ahead = 234.23423423423424
-collision_score = 0.0
-Real collision_score = 0.0
 Appended! len(v.frames) = 80
 stop rendering
-Loc = [66.64457551 53.47355025]
+self.frame = 4494
+cntr_car.off_screen = False
+cntr_car.arrived_to_dst = False
 len(info.frames) = 80
 len(env._state_images) = 80
 len(images) = 60
-___________________________________________________________
+__________________________________________________
 done = False, it_limit = 60, cntr = 60
 [saving movie to models/planning_results/videos_simulator/bprop-zdropout=0.5-rollouts=10-rollout_length=30-lrt=0.1-niter=5-ureg=0.0-uhinge=1.0-n_dropout=10-abuffer=1-saveoptstats=1-lambdal=0.0-lambdao=0.0-/ep1/ego]
 len(info.frames) = 80
 [saving simulator movie to models/planning_results/videos_simulator/bprop-zdropout=0.5-rollouts=10-rollout_length=30-lrt=0.1-niter=5-ureg=0.0-uhinge=1.0-n_dropout=10-abuffer=1-saveoptstats=1-lambdal=0.0-lambdao=0.0-/ep1/sim]
-ep:   1/1 | time: 60 | distance: 0 | success: 0 | mean time: 60 | mean distance: 0 | mean success: 0.000
-avg time travelled per second is 3.159263905694748
+ep:   1/1 | time: 60 | distance: 2398 | success: 0 | mean time: 60 | mean distance: 2398 | mean success: 0.000
+avg time travelled per second is 3.555061716619452
