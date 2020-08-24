@@ -1094,4 +1094,4 @@ class Simulator(core.Env):
         return self.vehicles[[v.id for v in self.vehicles].index(id_)]
 
     def is_circ_road(self):
-        return (not self.mode is None) and self.mode == "circular" 
+        return hasattr(self, 'mode') and self.mode == "circular"

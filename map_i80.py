@@ -84,7 +84,7 @@ class I80Car(Car):
     def is_autonomous(self):
         return False
 
-    def step(self, action):
+    def step(self, action, env=None):
         prev_x = self._position[0]
         super().step(action)
         self.dist += self._position[0]-prev_x
@@ -342,8 +342,8 @@ class I80(Simulator):
         self.df = self._get_data_frame(self._t_slot, self.screen_size[0], self.X_OFFSET)
         self.max_frame = max(self.df['Frame ID'])
         self.min_frame = min(self.df['Frame ID'])
-        print(f"max(self.df['Frame ID']) = {max(self.df['Frame ID'])}")
-        print(f"min(self.df['Frame ID']) = {min(self.df['Frame ID'])}")
+        #print(f"max(self.df['Frame ID']) = {max(self.df['Frame ID'])}")
+        #print(f"min(self.df['Frame ID']) = {min(self.df['Frame ID'])}")
         if vehicle_id: frame = self._get_first_frame(vehicle_id)
         if frame is None:  # controlled
             # Start at a random valid (new_vehicles is not empty) initial frame
@@ -473,7 +473,7 @@ class I80(Simulator):
                 v.abrupt_ignore = False
 
         # Remove cars to ensure a possible path
-        if self.controlled_car['locked'] and self.controlled_car['locked'].removal_budget > 0:
+        if self.controlled_car and self.controlled_car['locked'] and self.controlled_car['locked'].removal_budget > 0:
             c_car = self.controlled_car['locked']
             # Sort by closeness
             sorted_vehicles = sorted(self.vehicles, key=lambda v: np.square(v._position-c_car._position).sum())
@@ -648,3 +648,7 @@ class I80(Simulator):
 
             self._lane_surfaces[mode] = surface.copy()
             # pygame.image.save(surface, "i80-machine.png")
+
+
+    def is_in_view(self, v):
+        return False

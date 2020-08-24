@@ -197,6 +197,9 @@ def parse_args():
     parser.add_argument('-graph_density', type=float, default=0.001, help=' ')
     parser.add_argument('-display', type=int, default=0, help=' ')
     parser.add_argument('-debug', action='store_true', help=' ')
+    parser.add_argument('-circular_track', action='store_true', help=' ')
+    parser.add_argument('-safety_factor', default=0.0, help='Ratio of Safety Dim to View Dim')
+    parser.add_argument('-', action='store_true', help=' ')
     parser.add_argument('-model_dir', type=str, default='models/', help=' ')
     M1 = 'model=fwd-cnn-vae-fp-layers=3-bsize=64-ncond=20-npred=20-lrt=0.0001-nfeature=256-dropout=0.1-nz=32-' + \
          'beta=1e-06-zdropout=0.5-gclip=5.0-warmstart=1-seed=1.step200000.model'
@@ -225,6 +228,8 @@ def parse_args():
     parser.add_argument('-save_grad_vid',
                         action='store_true',
                         help='save gradients wrt states')
+
+    parser.add_argument('-no_write', action='stores_true')
 
     opt = parser.parse_args()
     opt.save_dir = path.join(opt.model_dir, 'planning_results')
@@ -258,7 +263,7 @@ def process_one_episode(opt,
         print(f'[gradient videos will be saved to: {grad_movie_dir}]')
     timeslot, car_id = utils.parse_car_path(car_path)
     # if None => picked at random
-    inputs = env.reset(time_slot=timeslot, vehicle_id=car_id)
+    inputs = env.reset(safety_factor = opt.safety_factor, time_slot=timeslot, vehicle_id=car_id)
     forward_model.reset_action_buffer(opt.npred)
     done, mu, std = False, None, None
     images, states, costs, actions, mu_list, std_list, grad_list = [], [], [], [], [], [], []
@@ -395,7 +400,7 @@ def process_one_episode(opt,
     if opt.save_grad_vid:
         grads = torch.cat(grad_list)
 
-    if len(images) > 3:
+    if not opt.no_write and len(images) > 3:
         images_3_channels = (images[:, :3] + images[:, 3:]).clamp(max=255)
         utils.save_movie(path.join(movie_dir, 'ego'),
                          images_3_channels.float() / 255.0,
@@ -436,8 +441,7 @@ def process_one_episode(opt,
     return returned
 
 
-def main():
-    opt = parse_args()
+def _main(opt):
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     random.seed(opt.seed)
@@ -572,14 +576,21 @@ def main():
     diff_time = time.time() - time_started
     print('avg time travelled per second is', total_images / diff_time)
 
-    torch.save(action_sequences, path.join(
-        opt.save_dir, f'{plan_file}.actions'))
-    torch.save(state_sequences, path.join(opt.save_dir, f'{plan_file}.states'))
-    torch.save(cost_sequences, path.join(opt.save_dir, f'{plan_file}.costs'))
+    if not opt.no_write:
+        torch.save(action_sequences, path.join(
+            opt.save_dir, f'{plan_file}.actions'))
+        torch.save(state_sequences, path.join(opt.save_dir, f'{plan_file}.states'))
+        torch.save(cost_sequences, path.join(opt.save_dir, f'{plan_file}.costs'))
 
     if writer is not None:
         writer.close()
 
+    return distance_travelled
+
+
+def main():
+    opt = parse_args()
+    _main(opt)
 
 if __name__ == '__main__':
     main()

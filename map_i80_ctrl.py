@@ -86,15 +86,20 @@ class ControlledI80(I80):
     # Environment's car class
     EnvCar = ControlledI80Car
 
-    def __init__(self, **kwargs):
+    def __init__(self, safety_factor=0.0, **kwargs):
         super().__init__(**kwargs)
 
-    def reset(self, mode="circular", **kwargs):
+    def reset(self, safety_factor = 0.0, is_cir_road=False, **kwargs):
         super().reset(**kwargs)
-        if mode in ["straight", "circular"]:
-            self.mode = mode
-        else:
-            raise ValueError("mode must be straight or circular")
+        self.mode = "circular" if is_cir_road else "straight"
+
+        MAX_SPEED = 130
+        look_ahead = MAX_SPEED * 1000 / 3600 * self.SCALE
+        look_sideways = 2 * self.LANE_W
+        view_length = 2 * look_ahead
+        view_width = 2 * look_sideways
+        self.safety_length = view_length * safety_factor
+        self.safety_width = view_width * safety_factor
 
         observation = None
         while observation is None:
@@ -122,13 +127,8 @@ class ControlledI80(I80):
                 res.append(center + sign1*parallel_offset + sign2*orth_offset)
             return res
 
-        def get_vision_corners(cont_car):
-            # Constants taken from I80.step (arguments to render)
-            MAX_SPEED = 130
-            look_ahead = MAX_SPEED * 1000 / 3600 * self.SCALE
-            look_sideways = 2*self.LANE_W
-
-            return get_car_corners(cont_car, 2*look_ahead, 2*look_sideways)
+        def get_safety_corners(cont_car):
+            return get_car_corners(cont_car, self.safety_length, self.safety_width)
 
         # ToDo: If runtime slows down alot, consider comparing distance between rectangles 
         # to rule out very far away points quickly. Note that usually, close points will be compared
@@ -138,7 +138,7 @@ class ControlledI80(I80):
             return rect1.intersects(rect2)
 
         car_corners = get_car_corners(car, car._length, car._width)
-        vision_corners = get_vision_corners(cont_car)
+        vision_corners = get_safety_corners(cont_car)
 
         if is_overlap(vision_corners, car_corners):
             return True

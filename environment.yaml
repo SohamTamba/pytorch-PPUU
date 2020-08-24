@@ -22,3 +22,4 @@ dependencies:
     - moviepy
     - bqplot
     - astropy
+    - shapely
