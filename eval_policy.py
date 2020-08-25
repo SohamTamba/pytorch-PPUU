@@ -273,7 +273,13 @@ def process_one_episode(opt,
     cost_sequence, action_sequence, state_sequence = [], [], []
     has_collided = False
     off_screen = False
+    it = 0
+    max_it = 1000
     while not done:
+        if it > max_it:
+            print("Iteration Limit Exceeded!\nTerminating Episode")
+            break
+        it += 1
         input_images = inputs['context'].contiguous()
         input_states = inputs['state'].contiguous()
         if opt.save_grad_vid:

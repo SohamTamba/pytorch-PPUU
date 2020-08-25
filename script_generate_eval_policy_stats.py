@@ -4,6 +4,7 @@ import os
 import torch
 import pickle
 import numpy
+import argparse
 
 class ArgsHolder:
     def __init__(self):
@@ -57,7 +58,7 @@ class ArgsHolder:
         self.num_processes = -1
         self.save_grad_vid = False
 
-        self.save_dir = path.join(self.model_dir, 'planning_results')
+        self.save_dir = os.path.join(self.model_dir, 'planning_results')
         self.height = 117
         self.width = 24
         self.h_height = 14
@@ -73,17 +74,27 @@ class ArgsHolder:
 
 if __name__ == '__main__':
 
+    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser.add_argument('--one_exec', action='store_true')
+    parser.add_argument('--local', action='store_true')
+    args = parser.parse_args()
+
     opt = ArgsHolder()
-    opt.model_dir = '/misc/vlgscratch4/LecunGroup/nvidia-collab/models_v14'
+    if args.local:
+        opt.model_dir = '/load_models/'
+        opt.num_processes = 1
+    else:
+        opt.model_dir = '/misc/vlgscratch4/LecunGroup/nvidia-collab/models_v14'
     unformatted_policy_net = 'MPUR-policy-deterministic-model=vae-zdropout=0.5-nfeature=256-bsize=6-npred=30-ureg=0.05-lambdal=0.2-lambdaa=0.0-gamma=0.99-lrtz=0.0-updatez=0-inferz=False-learnedcost=False-seed={seed}-novaluestep{step}.model'
 
     out_dir = "dist-stats"
 
-    if not os.path.exists(out):
+    if not os.path.exists(out_dir):
         os.makedirs(out_dir)
 
     for seed in [1, 2, 3]:
         for step in range(10000, 115000, 5000):
+            print(f"Starting seed = {seed} | step = {step}")
             opt.policy_model = unformatted_policy_net.format(seed=seed, step=step)
             distance_travelled = _main(opt)
             distance_travelled = numpy.array(distance_travelled)
@@ -94,6 +105,10 @@ if __name__ == '__main__':
                 pickle.dump(distance_travelled, f)
 
             print(f"Saved file: {out_path}")
+            if args.local or args.one_exec:
+                break
+        if args.local or args.one_exec:
+            break
 
 
 

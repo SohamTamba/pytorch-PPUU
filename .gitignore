@@ -20,3 +20,4 @@ traffic-data
 *pkl
 Notebooks/.ipynb_checkpoints/
 models/planning_results
+load_models
