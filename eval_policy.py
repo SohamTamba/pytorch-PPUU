@@ -265,7 +265,7 @@ def process_one_episode(opt,
     timeslot, car_id = utils.parse_car_path(car_path)
     # if None => picked at random
     inputs = env.reset(safety_factor = opt.safety_factor, time_slot=timeslot, vehicle_id=car_id)
-    forward_model.reset_action_buffer(opt.npred)
+    #forward_model.reset_action_buffer(opt.npred)
     done, mu, std = False, None, None
     images, states, costs, actions, mu_list, std_list, grad_list = [], [], [], [], [], [], []
     cntr = 0
@@ -274,6 +274,9 @@ def process_one_episode(opt,
     cost_sequence, action_sequence, state_sequence = [], [], []
     has_collided = False
     off_screen = False
+
+    MPUR_model = torch.load(os.path.join(opt.model_dir, "policy_networks", opt.policy_model))['model']
+
     it = 0
     max_it = 1000
     while not done:
@@ -361,7 +364,6 @@ def process_one_episode(opt,
                 nexec=opt.nexec
             )
 
-        MPUR_model = torch.load(os.path.join(opt.model_dir, "policy_networks", opt.policy_model))['model']
 
         action_sequence.append(a)
         state_sequence.append(input_states)
