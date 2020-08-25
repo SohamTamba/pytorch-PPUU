@@ -14,6 +14,7 @@ import torch.nn.parallel
 import numpy
 import gym
 from os import path
+import os
 import planning
 import utils
 from dataloader import DataLoader
@@ -330,7 +331,7 @@ def process_one_episode(opt,
             )
             a = a.cpu().view(1, 2).numpy()
         elif opt.method == 'policy-MPUR':
-            a, entropy, mu, std = forward_model.policy_net(
+            a, entropy, mu, std = MPUR_model(
                 input_images,
                 input_states,
                 sample=True,
@@ -359,6 +360,8 @@ def process_one_episode(opt,
                 u_reg=opt.u_reg,
                 nexec=opt.nexec
             )
+
+        MPUR_model = torch.load(os.path.join(opt.model_dir, "policy_networks", opt.policy_model))['model']
 
         action_sequence.append(a)
         state_sequence.append(input_states)
@@ -463,7 +466,7 @@ def _main(opt):
         policy_network_il,
         policy_network_mper,
         data_stats
-    ) = load_models(opt, data_path, device)
+    ) = None, None, None, None, None #load_models(opt, data_path, device)
     splits = torch.load(path.join(data_path, 'splits.pth'))
 
     if opt.u_reg > 0.0:
