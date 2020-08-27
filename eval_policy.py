@@ -275,13 +275,7 @@ def process_one_episode(opt,
     has_collided = False
     off_screen = False
 
-    checkpoint = torch.load(os.path.join(opt.model_dir, "policy_networks", opt.policy_model))
-    MPUR_model = checkpoint['model'].policy_net
-    MPUR_model.stats = data_stats
-    MPUR_model.actor_critic = False
-    MPUR_model.options = checkpoint['opt']
 
-    MPUR_model.stats = torch.load()
     it = 0
     max_it = 1000
     while not done:
@@ -339,7 +333,7 @@ def process_one_episode(opt,
             )
             a = a.cpu().view(1, 2).numpy()
         elif opt.method == 'policy-MPUR':
-            a, entropy, mu, std = MPUR_model(
+            a, entropy, mu, std = forward_model.policy_net(
                 input_images,
                 input_states,
                 sample=True,
@@ -473,9 +467,7 @@ def _main(opt):
         policy_network_il,
         policy_network_mper,
         data_stats
-    ) = None, None, None, None, None #load_models(opt, data_path, device)
-    splits = torch.load(path.join(data_path, 'splits.pth'))
-    data_stats = torch.load(path.join(data_path, 'data_stats.pth'))
+    ) = load_models(opt, data_path, device)
 
     if opt.u_reg > 0.0:
         forward_model.train()
