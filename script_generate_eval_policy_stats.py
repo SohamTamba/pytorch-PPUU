@@ -85,29 +85,37 @@ if __name__ == '__main__':
         opt.num_processes = 1
     else:
         opt.model_dir = '/misc/vlgscratch4/LecunGroup/nvidia-collab/models_v14'
-    unformatted_policy_net = 'MPUR-policy-deterministic-model=vae-zdropout=0.5-nfeature=256-bsize=6-npred=30-ureg=0.05-lambdal=0.2-lambdaa=0.0-gamma=0.99-lrtz=0.0-updatez=0-inferz=False-learnedcost=False-seed={seed}-novaluestep{step}.model'
+    unformatted_policy_net = \
+    'MPUR-policy-deterministic-model=vae-zdropout=0.5-nfeature=256-bsize=6-npred=30-ureg=0.05-lambdal=0.2-\
+    lambdaa=0.0-gamma=0.99-lrtz=0.0-updatez=0-inferz=False-learnedcost=False-seed={seed}-novaluestep{step}.model'
 
     out_dir = "dist-stats"
 
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
 
-    for seed in [1, 2, 3]:
-        for step in range(10000, 115000, 5000):
-            print(f"Starting seed = {seed} | step = {step}")
-            opt.policy_model = unformatted_policy_net.format(seed=seed, step=step)
-            distance_travelled = _main(opt)
-            distance_travelled = numpy.array(distance_travelled)
-            out_file = f"seed={seed}-step={step}.p"
-            out_path = os.path.join(out_dir, out_file)
+    break_after_one = args.local or args.one_exec
 
-            with open(out_path, 'wb') as f:
-                pickle.dump(distance_travelled, f)
+    for safety_factor in [0.0, 0.33, 0.67, 1.0]:
+        opt.safety_factor = safety_factor
+        for seed in [1, 2, 3]:
+            for step in range(10000, 120000 +1, 5000):
+                print(f"Starting seed = {seed} | step = {step}")
+                opt.policy_model = unformatted_policy_net.format(seed=seed, step=step)
+                distance_travelled = _main(opt)
+                distance_travelled = numpy.array(distance_travelled)
+                out_file = f"safety_factor={opt.safety_factor}-seed={seed}-step={step}.p"
+                out_path = os.path.join(out_dir, out_file)
 
-            print(f"Saved file: {out_path}")
-            if args.local or args.one_exec:
+                with open(out_path, 'wb') as f:
+                    pickle.dump(distance_travelled, f)
+
+                print(f"Saved file: {out_path}")
+                if break_after_one:
+                    break
+            if break_after_one:
                 break
-        if args.local or args.one_exec:
+        if break_after_one:
             break
 
 

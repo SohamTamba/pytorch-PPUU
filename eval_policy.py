@@ -275,7 +275,7 @@ def process_one_episode(opt,
     has_collided = False
     off_screen = False
 
-    MPUR_model = torch.load(os.path.join(opt.model_dir, "policy_networks", opt.policy_model))['model']
+    MPUR_model = torch.load(os.path.join(opt.model_dir, "policy_networks", opt.policy_model))['model'].policy_net
 
     it = 0
     max_it = 1000
