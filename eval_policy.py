@@ -276,7 +276,7 @@ def process_one_episode(opt,
     off_screen = False
 
     MPUR_model = torch.load(os.path.join(opt.model_dir, "policy_networks", opt.policy_model))['model'].policy_net
-
+    MPUR_mdata_stats.pth')
     it = 0
     max_it = 1000
     while not done:
@@ -525,6 +525,7 @@ def _main(opt):
                     dataloader.car_sizes[sorted(list(dataloader.car_sizes.keys()))[
                         timeslot]][car_id]
                 )[None, :]
+        process_one_episode(opt,env,car_path,forward_model,policy_network_il,data_stats,plan_file,j,car_sizes)
         async_results.append(
             pool.apply_async(
                 process_one_episode, (

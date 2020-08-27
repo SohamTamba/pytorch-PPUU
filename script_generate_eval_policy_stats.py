@@ -84,10 +84,10 @@ if __name__ == '__main__':
         opt.model_dir = '/load_models/'
         opt.num_processes = 1
     else:
-        opt.model_dir = '/misc/vlgscratch4/LecunGroup/nvidia-collab/models_v14'
+        opt.model_dir = '/misc/vlgscratch4/LecunGroup/nvidia-collab/models_v13'
     unformatted_policy_net = \
-    'MPUR-policy-deterministic-model=vae-zdropout=0.5-nfeature=256-bsize=6-npred=30-ureg=0.05-lambdal=0.2-\
-    lambdaa=0.0-gamma=0.99-lrtz=0.0-updatez=0-inferz=False-learnedcost=False-seed={seed}-novaluestep{step}.model'
+    'MPUR-policy-deterministic-model=vae-zdropout=0.5-nfeature=256-bsize=6-npred=30-ureg=0.05-lambdal=0.2-' + \
+    'lambdaa=0.0-gamma=0.99-lrtz=0.0-updatez=0-inferz=0-learnedcost=False-seed={seed}-novaluestep{step}.model'
 
     out_dir = "dist-stats"
 
