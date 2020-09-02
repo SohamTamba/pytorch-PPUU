@@ -86,12 +86,12 @@ class ControlledI80(I80):
     # Environment's car class
     EnvCar = ControlledI80Car
 
-    def __init__(self, safety_factor=0.0, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def reset(self, safety_factor = 0.0, is_cir_road=False, **kwargs):
+    def reset(self, safety_factor = 0.0, is_circ_road=False, **kwargs):
         super().reset(**kwargs)
-        self.mode = "circular" if is_cir_road else "straight"
+        self.mode = "circular" if is_circ_road else "straight"
 
         MAX_SPEED = 130
         look_ahead = MAX_SPEED * 1000 / 3600 * self.SCALE

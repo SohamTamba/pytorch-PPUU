@@ -12,7 +12,7 @@ import utils
 
 # encodes a sequence of input frames and states, and optionally a cost or action, to a hidden representation
 class encoder(nn.Module):
-    def __init__(self, opt, a_size, n_inputs, states=True, state_input_size=4, n_channels=3):
+    def __init__(self, opt, a_size, n_inputs, states=True, state_input_size=4, n_channels=4):
         super(encoder, self).__init__()
         self.opt = opt
         self.a_size = a_size
@@ -75,6 +75,9 @@ class encoder(nn.Module):
 
     def forward(self, images, states=None, actions=None):
         bsize = images.size(0)
+        #print(f"type(self.f_encoder) = {type(self.f_encoder)}")
+        #print(f"self.f_encoder = {self.f_encoder}")
+        #assert False
         h = self.f_encoder(images.view(bsize, self.n_inputs * self.n_channels, self.opt.height, self.opt.width))
         if states is not None:
             h = h + self.s_encoder(states.contiguous().view(bsize, -1)).view(h.size())

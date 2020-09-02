@@ -34,7 +34,7 @@ class ArgsHolder:
         self.graph_density = 0.001
         self.display = 0
         self.debug = False
-        self.circular_track = False
+        self.circular_track = True
         self.safety_factor = 0.0
         self.model_dir = 'models/'
 
@@ -55,10 +55,10 @@ class ArgsHolder:
         self.save_sim_video = False
         self.enable_tensorboard = False
         self.tensorboard_dir = ''
-        self.num_processes = -1
+        self.num_processes = 3
         self.save_grad_vid = False
 
-        self.save_dir = os.path.join(self.model_dir, 'planning_results')
+        self.save_dir = "None"
         self.height = 117
         self.width = 24
         self.h_height = 14
@@ -84,10 +84,10 @@ if __name__ == '__main__':
         opt.model_dir = '/load_models/'
         opt.num_processes = 1
     else:
-        opt.model_dir = '/misc/vlgscratch4/LecunGroup/nvidia-collab/models_v13'
+        opt.model_dir = '/misc/vlgscratch4/LecunGroup/nvidia-collab/models_v14'
     unformatted_policy_net = \
-    'MPUR-policy-deterministic-model=vae-zdropout=0.5-nfeature=256-bsize=6-npred=30-ureg=0.05-lambdal=0.2-' + \
-    'lambdaa=0.0-gamma=0.99-lrtz=0.0-updatez=0-inferz=0-learnedcost=False-seed={seed}-novaluestep{step}.model'
+        "MPUR-policy-deterministic-model=vae-zdropout=0.5-nfeature=256-bsize=6-npred=30-ureg=0.05-lambdal=0.2" +\
+        "-lambdaa=0.0-gamma=0.99-lrtz=0.0-updatez=0-inferz=False-learnedcost=False-seed={seed}-novaluestep{step}.model"
 
     out_dir = "dist-stats"
 
@@ -96,14 +96,13 @@ if __name__ == '__main__':
 
     break_after_one = args.local or args.one_exec
 
-    for safety_factor in [0.0, 0.33, 0.67, 1.0]:
-        opt.safety_factor = safety_factor
-        for seed in [1, 2, 3]:
-            for step in range(10000, 120000 +1, 5000):
+    for step in range(10000, 115000 + 1, 5000):
+        for safety_factor in [0.0, 0.33, 0.67, 1.0]:
+            opt.safety_factor = safety_factor
+            for seed in [1, 2, 3]:
                 print(f"Starting seed = {seed} | step = {step}")
                 opt.policy_model = unformatted_policy_net.format(seed=seed, step=step)
                 distance_travelled = _main(opt)
-                distance_travelled = numpy.array(distance_travelled)
                 out_file = f"safety_factor={opt.safety_factor}-seed={seed}-step={step}.p"
                 out_path = os.path.join(out_dir, out_file)
 

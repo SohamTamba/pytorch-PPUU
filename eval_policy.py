@@ -23,7 +23,7 @@ import time
 
 from torch.multiprocessing import Pool, set_start_method
 
-torch.multiprocessing.set_sharing_strategy('file_system')
+#torch.multiprocessing.set_sharing_strategy('file_system')
 
 
 class SimulationResult:
@@ -66,7 +66,7 @@ def load_models(opt, data_path, device='cuda'):
     elif path.exists(opt.mfile):
         forward_model = torch.load(opt.mfile)
     else:
-        raise runtime_error(f'couldn\'t find file {opt.mfile}')
+        assert False, f'couldn\'t find file {model_path}'
 
     if type(forward_model) is dict:
         forward_model = forward_model['model']
@@ -95,7 +95,8 @@ def load_models(opt, data_path, device='cuda'):
         checkpoint = torch.load(model_path)
         policy_network_mpur = checkpoint['model']
         policy_network_mpur.stats = stats
-        forward_model.policy_net = policy_network_mpur.policy_net
+        forward_model = policy_network_mpur
+        #forward_model.policy_net = policy_network_mpur.policy_net
         forward_model.policy_net.stats = stats
         forward_model.policy_net.actor_critic = False
         forward_model.policy_net.options = checkpoint['opt']
@@ -264,7 +265,7 @@ def process_one_episode(opt,
         print(f'[gradient videos will be saved to: {grad_movie_dir}]')
     timeslot, car_id = utils.parse_car_path(car_path)
     # if None => picked at random
-    inputs = env.reset(safety_factor = opt.safety_factor, time_slot=timeslot, vehicle_id=car_id)
+    inputs = env.reset(safety_factor = opt.safety_factor, time_slot=timeslot, vehicle_id=car_id, is_circ_road = opt.circular_track)
     #forward_model.reset_action_buffer(opt.npred)
     done, mu, std = False, None, None
     images, states, costs, actions, mu_list, std_list, grad_list = [], [], [], [], [], [], []
@@ -275,9 +276,8 @@ def process_one_episode(opt,
     has_collided = False
     off_screen = False
 
-
     it = 0
-    max_it = 1000
+    max_it = 3000
     while not done:
         if it > max_it:
             print("Iteration Limit Exceeded!\nTerminating Episode")
@@ -440,7 +440,7 @@ def process_one_episode(opt,
 
     returned = SimulationResult()
     returned.time_travelled = len(images)
-    returned.distance_travelled = input_state_tfinal[0] - input_state_t0[0]
+    returned.distance_travelled = env.controlled_car["locked"].dist
     returned.road_completed = 1 if cost['arrived_to_dst'] else 0
     returned.off_screen = off_screen
     returned.has_collided = has_collided
@@ -453,6 +453,7 @@ def process_one_episode(opt,
 
 def _main(opt):
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    torch.cuda.empty_cache()
 
     random.seed(opt.seed)
     numpy.random.seed(opt.seed)
@@ -469,6 +470,8 @@ def _main(opt):
         data_stats
     ) = load_models(opt, data_path, device)
 
+    splits = torch.load(path.join(data_path, 'splits.pth'))
+
     if opt.u_reg > 0.0:
         forward_model.train()
         forward_model.opt.u_hinge = opt.u_hinge
@@ -477,27 +480,28 @@ def _main(opt):
         planning.estimate_uncertainty_stats(
             forward_model, dataloader, n_batches=50, npred=opt.npred)
 
-    gym.envs.registration.register(
-        id='I-80-v1',
-        entry_point='map_i80_ctrl:ControlledI80',
-        kwargs=dict(
-            fps=10,
-            nb_states=opt.ncond,
-            display=False,
-            delta_t=0.1,
-            store_simulator_video=opt.save_sim_video,
-            show_frame_count=False,
+    if not 'I-80-v1' in gym.envs.registry.env_specs:
+        gym.envs.registration.register(
+            id='I-80-v1',
+            entry_point='map_i80_ctrl:ControlledI80',
+            kwargs=dict(
+                fps=10,
+                nb_states=opt.ncond,
+                display=False,
+                delta_t=0.1,
+                store_simulator_video=opt.save_sim_video,
+                show_frame_count=False,
+            )
         )
-    )
 
-    print('Building the environment (loading data, if any)')
+    #print('Building the environment (loading data, if any)')
     env_names = {
         'i80': 'I-80-v1',
     }
     env = gym.make(env_names[opt.map])
 
     plan_file = build_plan_file_name(opt)
-    print(f'[saving to {path.join(opt.save_dir, plan_file)}]')
+    #print(f'[saving to {path.join(opt.save_dir, plan_file)}]')
 
     # different performance metrics
     time_travelled, distance_travelled, road_completed = [], [], []
@@ -508,8 +512,8 @@ def _main(opt):
 
     n_test = len(splits['test_indx'])
 
-    set_start_method('spawn')
-    pool = Pool(opt.num_processes)
+    #set_start_method('spawn')
+    #pool = Pool(opt.num_processes)
 
     async_results = []
 
@@ -523,25 +527,29 @@ def _main(opt):
                     dataloader.car_sizes[sorted(list(dataloader.car_sizes.keys()))[
                         timeslot]][car_id]
                 )[None, :]
-        process_one_episode(opt,env,car_path,forward_model,policy_network_il,data_stats,plan_file,j,car_sizes)
+
+        '''x = process_one_episode(opt,env,car_path,forward_model,policy_network_il,data_stats,plan_file,j,car_sizes)
+        print(f"{x.road_completed}\n{x.distance_travelled}\n{x.time_travelled}\n{x.has_collided}\n{x.off_screen}")
+        print("DONE\n\n\n\n\n")
+        assert False'''
         async_results.append(
-            pool.apply_async(
-                process_one_episode, (
-                    opt,
-                    env,
-                    car_path,
-                    forward_model,
-                    policy_network_il,
-                    data_stats,
-                    plan_file,
-                    j,
-                    car_sizes
-                )
+            #pool.apply_async(
+            process_one_episode(
+                opt,
+                env,
+                car_path,
+                forward_model,
+                policy_network_il,
+                data_stats,
+                plan_file,
+                j,
+                car_sizes
             )
+            #)
         )
 
     for j in range(n_test):
-        simulation_result = async_results[j].get()
+        simulation_result = async_results[j]#.get()
 
         time_travelled.append(simulation_result.time_travelled)
         distance_travelled.append(simulation_result.distance_travelled)
@@ -562,7 +570,7 @@ def _main(opt):
             f'mean distance: {torch.Tensor(distance_travelled).mean():.0f}',
             f'mean success: {torch.Tensor(road_completed).mean():.3f}',
         ))
-        print(log_string)
+        #print(log_string)
         utils.log(path.join(opt.save_dir, f'{plan_file}.log'), log_string)
 
         if writer is not None:
@@ -580,11 +588,11 @@ def _main(opt):
             writer.add_scalar('ByEpisode/Distance',
                               simulation_result.distance_travelled, j)
 
-    pool.close()
-    pool.join()
+    #pool.close()
+    #pool.join()
 
     diff_time = time.time() - time_started
-    print('avg time travelled per second is', total_images / diff_time)
+    #print('avg time travelled per second is', total_images / diff_time)
 
     if not opt.no_write:
         torch.save(action_sequences, path.join(
@@ -595,6 +603,7 @@ def _main(opt):
     if writer is not None:
         writer.close()
 
+    #print(distance_travelled)
     return distance_travelled
 
 
