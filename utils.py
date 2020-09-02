@@ -9,6 +9,7 @@ import re
 import sys
 from datetime import datetime
 from os import path
+from typing import List
 
 import matplotlib.pyplot as plt
 import scipy
@@ -587,5 +588,136 @@ def normalize_inputs(images, states, stats, device='cuda'):
         states = states.to(device).unsqueeze(0)
     return images, states
 
-def get_device():
-    return 'cuda' if torch.cuda.is_available() else 'cpu'
+def collate_dense_tensors(samples: List[torch.Tensor],
+                          pad_v: float = 0) -> torch.Tensor:
+    '''
+    Takes a list of tensors with the following dimensions:
+        [(d_11,       ...,           d_1K),
+         (d_21,       ...,           d_2K),
+         ...,
+         (d_N1,       ...,           d_NK)]
+    and stack + pads them into a single tensor of:
+    (N, max_i=1,N { d_i1 }, ..., max_i=1,N {diK})
+    '''
+    if len(samples) == 0:
+        return torch.Tensor()
+    if len(set(x.dim() for x in samples)) != 1:
+        raise RuntimeError(f"Samples has varying dimensions: {[x.dim() for x in samples]}")
+    max_shape = [max(lst) for lst in zip(*[x.shape for x in samples])]
+    result = torch.empty(len(samples), *max_shape, dtype=samples[0].dtype, device=samples[0].device).fill_(pad_v)
+    for i in range(len(samples)):
+        result_i = result[i]
+        t = samples[i]
+        result_i[tuple(slice(0, k) for k in t.shape)] = t
+    return result
+
+def assert_shape(tensor, *args):
+    # This only returns the unbound shapes
+    from inspect import getframeinfo, currentframe
+    caller = getframeinfo(currentframe().f_back)
+    source = f"{caller.filename}:{caller.lineno}:"
+    assert len(tensor.shape) == len(
+        args
+    ), f"{source} should have {len(args)} dimensions, actually has shape {tensor.shape}"
+    unbound = []
+    for i, ii in enumerate(args):
+        if ii == -1:
+            unbound.append(tensor.shape[i])
+        else:
+            assert (
+                tensor.shape[i] == ii
+            ), f"{source} shape should be {args}, actually {tensor.shape}"
+    if len(unbound) == 1:
+        return unbound[0]
+    return unbound
+
+def scatter_sum_2d(xy, vectors, shape):
+    """
+    Scatters the vectors in vector into the coordinates specified by xy
+    """
+    H, W = shape
+    B, N, C = assert_shape(vectors, -1, -1, -1)
+    assert_shape(xy, B, N, 2)
+
+    ys = xy[:, :, 0]
+    xs = xy[:, :, 1]
+
+    # Filter out data with negative coordinates
+    mask = (xs >= 0) * (ys >= 0)
+    dataMask = mask.reshape(B, N, 1)
+    maskedData = vectors[dataMask.expand(B, N, C)].reshape(-1, C)
+
+    # Map 2D coords to 1D coords
+    indices = xs + ys * W
+    if B > 1:
+        bs = torch.arange(0, B, device=xy.device, dtype=xy.dtype).unsqueeze(1)
+        indices += bs * H * W
+
+    indices = indices.masked_select(mask).long().flatten()
+    dest = torch.zeros(H * W * B, C, device=xy.device, dtype=vectors.dtype)
+    # Index_add uses atomic operations
+    dest = dest.index_add(0, indices, maskedData)
+    dest = dest.reshape(B, H, W, C)
+    return dest.permute(0, 3, 1, 2)
+
+def gather_2d(xy, spatial, padv=0):
+    # Grabs the embeddings at the spatial map at locations
+    # given by xy, kind of a pseudoinverse to scatter_add, as long as
+    # the indices in scatter_add do not collide
+    B, C, H, W = assert_shape(spatial, -1, -1, -1, -1)
+    N = assert_shape(xy, B, -1, 2)
+
+    ys = xy[:, :, 0]
+    xs = xy[:, :, 1]
+
+    # Filter out data with negative coordinates
+    mask = (xs >= 0) * (ys >= 0)
+
+    # Map 2D coords to 1D coords
+    indices = xs + ys * W
+    if B > 1:
+        bs = torch.arange(0, B, dtype=xy.dtype, device=xy.device).unsqueeze(1)
+        indices += bs * H * W
+
+    spatial_permuted = spatial.permute(0, 2, 3, 1).reshape(-1, C)
+    indices = indices.masked_select(mask).long().flatten().unsqueeze(1).expand(-1, C)
+    gather1d = torch.gather(spatial_permuted, 0, indices)
+
+    # Now we have a list of the indices, we have to copy it again
+    # respecting the mask
+    rev_indices = (
+        torch.arange(B * N, device=xy.device)
+          .reshape(B, N)
+          .masked_select(mask)
+          .flatten()
+          .unsqueeze(-1)
+          .expand(-1, C)
+    )
+    out = xy.new_ones(B * N, C).mul(padv).scatter_(0, rev_indices, gather1d)
+
+    return out.reshape(B, N, C)
+
+
+if __name__ == "__main__":
+    # Tests scatter_sum_2d and gather_2d
+    inds = []
+    datas = []
+    B = 4
+    for i in range(B):
+        datas.append(torch.randn(i+1, 1) + i)
+        datas[-1] += torch.randn_like(datas[-1])
+        ind = torch.empty(i+1, 2, dtype=torch.long)
+        for j in range(i+1):
+            ind[j][0] = int(i)
+            ind[j][1] = int(2 * i)
+        inds.append(ind)
+    dataBatch = collate_dense_tensors(datas, -1)
+    indBatch = collate_dense_tensors(inds, -1)
+
+    res = scatter_sum_2d(indBatch, dataBatch, (10, 12))
+    for i in range(B):
+        assert res[i, :, i, 2*i].allclose(datas[i].sum(0))
+
+    inv = gather_2d(indBatch, res)
+    for i in range(B):
+        assert inv[i, :(i+1)].allclose(datas[i].sum())

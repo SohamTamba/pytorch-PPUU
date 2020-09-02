@@ -38,6 +38,7 @@ parser.add_argument('-grad_clip', type=float, default=5.0)
 parser.add_argument('-epoch_size', type=int, default=2000)
 parser.add_argument('-warmstart', type=int, default=0, help='initialize with pretrained model')
 parser.add_argument('-debug', action='store_true')
+parser.add_argument('-object_space', action='store_true')
 parser.add_argument('-enable_tensorboard', action='store_true',
                     help='Enables tensorboard logging.')
 parser.add_argument('-tensorboard_dir', type=str, default='models',
@@ -103,12 +104,7 @@ else:
     else:
         prev_model = ''
 
-    if opt.model == 'fwd-cnn':
-        # deterministic model
-        model = models.FwdCNN(opt, mfile=prev_model)
-    elif opt.model == 'fwd-cnn-vae-fp':
-        # stochastic VAE model
-        model = models.FwdCNN_VAE(opt, mfile=prev_model)
+    model = models.MODEL_DICT[opt.model](opt, mfile=prev_model)
     optimizer = optim.Adam(model.parameters(), opt.lrt)
     n_iter = 0
 

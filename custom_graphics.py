@@ -42,9 +42,6 @@ def draw_dashed_line(surf, color, start_pos, end_pos, width=1, dash_length=10):
         end = origin + (slope * (index + 1) * dash_length)
         pygame.draw.line(surf, color, start.get(), end.get(), width)
 
-def draw_vert_line(surf, x, ht, color=(255, 255, 0), width=1):
-    pygame.draw.line(surf, color, Point((x, 0)).get(), Point((x, ht-1)).get(), width)
-
 
 def draw_text(screen, text, xy, font_size=30, colour=(255, 255, 255), font=None):
     if font is None:
@@ -56,10 +53,35 @@ def draw_text(screen, text, xy, font_size=30, colour=(255, 255, 255), font=None)
     screen.blit(text, text_rect)
 
 
-def draw_rect(screen, colour, rect, direction=(1, 0), thickness=0):
+def batch_rect_coords(coords: np.ndarray):
+    # coords are [x, y, l, w, dirx, diry]
+
+    x = coords[:, 0]
+    y = coords[:, 1]
+    l = coords[:, 2]
+    w = coords[:, 3]
+    cs = coords[:, 4:6]
+
+    def com(x, y):
+        return np.stack([x, y], axis=1)[:, np.newaxis, :]
+    xy = np.concatenate([com(x, y - w/2), com(x, y + w/2), com(x + l, y + w/2), com(x + l, y - w/2)], axis=1)[:, :, :, np.newaxis]
+    oldxy = np.stack([x, y], axis=1)[:, np.newaxis, :, np.newaxis]
+    assert xy.ndim == 4
+    assert tuple(xy.shape) == (coords.shape[0], 4, 2, 1)
+
+    rot = np.stack([cs * np.asarray([1, -1]), cs @ np.asarray([[0, 1], [1, 0]])], axis=1)[:, np.newaxis, :, :]
+    return (rot @ (xy - oldxy) + oldxy).squeeze(3)
+
+
+def rect_coords(rect, direction=(1,0)):
     x, y, l, w = rect
     xy = np.array(((x, y - w/2), (x, y + w/2), (x + l, y + w/2), (x + l, y - w/2)))
     c, s = direction
     rot = np.array(((c, -s), (s, c)))
     xy = (rot @ (xy - (x, y)).T).T + (x, y)
+    return xy
+
+
+def draw_rect(screen, colour, rect, direction=(1, 0), thickness=0):
+    xy = rect_coords(rect, direction)
     return pygame.draw.polygon(screen, colour, xy, thickness)

@@ -7,8 +7,6 @@ import random
 import torch
 import scipy.misc
 from gym.envs.registration import register
-import PIL
-from PIL import Image
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-display', type=int, default=0)

@@ -1,12 +1,13 @@
 from map_i80 import I80, I80Car
 from traffic_gym_v2 import PatchedCar
 
+
 class ControlledI80Car(I80Car):
 
     # Import get_lane_set from PatchedCar
     get_lane_set = PatchedCar.get_lane_set
 
-    def __init__(self, df, y_offset, look_ahead, screen_w, is_circ_road, font=None, kernel=0, dt=1/10):
+    def __init__(self, df, y_offset, look_ahead, screen_w, font=None, kernel=0, dt=1/10):
         super().__init__(df, y_offset, look_ahead, screen_w, font, kernel, dt)
         self.is_controlled = False
         self.buffer_size = 0
@@ -20,18 +21,11 @@ class ControlledI80Car(I80Car):
         if not self.is_controlled or len(self._states_image) < self.buffer_size:
             return super().current_lane
 
-        if self.is_circ_road:
-            while self._position[0] > self.screen_w:
-
-                print(f"{self} is looped!")
-                self._position[0] -= self.screen_w
-
+        # Otherwise fetch x location
         x = self._position[0]
-        if x > self.screen_w:# - 1.75 * self.look_ahead:
+        if x > self.screen_w - 1.75 * self.look_ahead:
             self.off_screen = True
             self.arrived_to_dst = True
-        #print(f"{self}.off_screen = {self.off_screen}")
-    
 
         # Fetch the y location
         y = self._position[1]
@@ -61,9 +55,6 @@ class ControlledI80Car(I80Car):
     def is_autonomous(self):
         return self.is_controlled and len(self._states_image) > self.buffer_size
 
-    def is_circ_road(self):
-        return self.is_circ_road
-
 
 class ControlledI80(I80):
 
@@ -71,20 +62,11 @@ class ControlledI80(I80):
     EnvCar = ControlledI80Car
 
     def __init__(self, **kwargs):
-        self.control_reps = None
         super().__init__(**kwargs)
 
-    def reset(self, mode="straight", **kwargs):
+    def reset(self, **kwargs):
         super().reset(**kwargs)
-        if mode in ["straight", "circular"]:
-            self.mode = mode
-        else:
-            raise ValueError("mode must be straight or circular")
-
         observation = None
         while observation is None:
             observation, reward, done, info = self.step()
         return observation
-
-    def is_circular_road(self):
-        return self.mode == "circular"

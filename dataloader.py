@@ -1,6 +1,7 @@
 import sys
 import numpy, random, pdb, math, pickle, glob, time, os, re
 import torch
+from utils import collate_dense_tensors
 
 
 class DataLoader:
@@ -13,73 +14,78 @@ class DataLoader:
 
         if dataset == 'i80' or dataset == 'us101':
             data_dir = f'traffic-data/state-action-cost/data_{dataset}_v0'
-        else:
-            data_dir = dataset
-
-        if single_shard:
-            # quick load for debugging
-            data_files = [f'{next(os.walk(data_dir))[1][0]}.txt/']
-        else:
-            data_files = next(os.walk(data_dir))[1]
-
-        self.images = []
-        self.actions = []
-        self.costs = []
-        self.states = []
-        self.ids = []
-        self.ego_car_images = []
-        for df in data_files:
-            combined_data_path = f'{data_dir}/{df}/all_data.pth'
-            if os.path.isfile(combined_data_path):
-                print(f'[loading data shard: {combined_data_path}]')
-                data = torch.load(combined_data_path)
-                self.images += data.get('images')
-                self.actions += data.get('actions')
-                self.costs += data.get('costs')
-                self.states += data.get('states')
-                self.ids += data.get('ids')
-                self.ego_car_images += data.get('ego_car')
+            if single_shard:
+                # quick load for debugging
+                data_files = [f'{next(os.walk(data_dir))[1][0]}/']
             else:
-                print(data_dir)
-                images = []
-                actions = []
-                costs = []
-                states = []
-                ids = glob.glob(f'{data_dir}/{df}/car*.pkl')
-                ids.sort()
-                ego_car_images = []
-                for f in ids:
-                    print(f'[loading {f}]')
-                    fd = pickle.load(open(f, 'rb'))
-                    Ta = fd['actions'].size(0)
-                    Tp = fd['pixel_proximity_cost'].size(0)
-                    Tl = fd['lane_cost'].size(0)
-                    # assert Ta == Tp == Tl  # TODO Check why there are more costs than actions
-                    # if not(Ta == Tp == Tl): pdb.set_trace()
-                    images.append(fd['images'])
-                    actions.append(fd['actions'])
-                    costs.append(torch.cat((
-                        fd.get('pixel_proximity_cost')[:Ta].view(-1, 1),
-                        fd.get('lane_cost')[:Ta].view(-1, 1),
-                    ), 1),)
-                    states.append(fd['states'])
-                    ego_car_images.append(fd['ego_car'])
+                data_files = next(os.walk(data_dir))[1]
 
-                print(f'Saving {combined_data_path} to disk')
-                torch.save({
-                    'images': images,
-                    'actions': actions,
-                    'costs': costs,
-                    'states': states,
-                    'ids': ids,
-                    'ego_car': ego_car_images,
-                }, combined_data_path)
-                self.images += images
-                self.actions += actions
-                self.costs += costs
-                self.states += states
-                self.ids += ids
-                self.ego_car_images += ego_car_images
+            self.images = []
+            self.actions = []
+            self.costs = []
+            self.states = []
+            self.raw_states = []
+            self.ids = []
+            self.ego_car_images = []
+            for df in data_files:
+                combined_data_path = f'{data_dir}/{df}/all_data.pth'
+                if os.path.isfile(combined_data_path):
+                    print(f'[loading data shard: {combined_data_path}]')
+                    data = torch.load(combined_data_path)
+                    self.images += data.get('images')
+                    self.actions += data.get('actions')
+                    self.costs += data.get('costs')
+                    self.states += data.get('states')
+                    self.raw_states += data.get('raw_states')
+                    self.ids += data.get('ids')
+                    self.ego_car_images += data.get('ego_car')
+                else:
+                    print(data_dir)
+                    images = []
+                    actions = []
+                    costs = []
+                    states = []
+                    raw_states = []
+                    ids = glob.glob(f'{data_dir}/{df}/car*.pkl')
+                    ids.sort()
+                    ego_car_images = []
+                    for f in ids:
+                        print(f'[loading {f}]')
+                        fd = pickle.load(open(f, 'rb'))
+                        Ta = fd['actions'].size(0)
+                        Tp = fd['pixel_proximity_cost'].size(0)
+                        Tl = fd['lane_cost'].size(0)
+                        # assert Ta == Tp == Tl  # TODO Check why there are more costs than actions
+                        # if not(Ta == Tp == Tl): pdb.set_trace()
+                        images.append(fd['images'])
+                        actions.append(fd['actions'])
+                        costs.append(torch.cat((
+                            fd.get('pixel_proximity_cost')[:Ta].view(-1, 1),
+                            fd.get('lane_cost')[:Ta].view(-1, 1),
+                        ), 1),)
+                        states.append(fd['states'])
+                        raw_states.append(fd['raw_states'])
+                        ego_car_images.append(fd['ego_car'])
+
+                    print(f'Saving {combined_data_path} to disk')
+                    torch.save({
+                        'images': images,
+                        'actions': actions,
+                        'costs': costs,
+                        'states': states,
+                        'raw_states': raw_states,
+                        'ids': ids,
+                        'ego_car': ego_car_images,
+                    }, combined_data_path)
+                    self.images += images
+                    self.actions += actions
+                    self.costs += costs
+                    self.states += states
+                    self.raw_states += raw_states
+                    self.ids += ids
+                    self.ego_car_images += ego_car_images
+        else:
+            assert False, 'Data set not supported'
 
         self.n_episodes = len(self.images)
         print(f'Number of episodes: {self.n_episodes}')
@@ -155,9 +161,11 @@ class DataLoader:
         if npred == -1:
             npred = self.opt.npred
 
-        images, states, actions, costs, ids, sizes, ego_cars = [], [], [], [], [], [], []
+        images, states, raw_states, actions, costs, ids, sizes, ego_cars = [], [], [], [], [], [], [], []
         nb = 0
         T = self.opt.ncond + npred
+        t0 = self.opt.ncond
+        t1 = T
         while nb < self.opt.batch_size:
             s = self.random.choice(indx)
             # min is important since sometimes numbers do not align causing issues in stack operation below
@@ -175,16 +183,20 @@ class DataLoader:
                 car_id = int(re.findall(r'car(\d+).pkl', splits[-1])[0])
                 size = self.car_sizes[time_slot][car_id]
                 sizes.append([size[0], size[1]])
+                raw_states.append(collate_raw_states(self.raw_states[s][t : t + T], reference_state_idx=t0-1).to(device))
                 nb += 1
 
         # Pile up stuff
         images  = torch.stack(images)
         states  = torch.stack(states)
+        raw_states = collate_dense_tensors(raw_states)
         actions = torch.stack(actions)
         sizes   = torch.tensor(sizes)
         ego_cars = torch.stack(ego_cars)
 
         # Normalise actions, state_vectors, state_images
+        # Zeming asks: Is it really reasonable to normalize the state vectors?
+        # It feels like you lose a lot of information (like velocities between batches, etc)
         if not self.opt.debug:
             actions = self.normalise_action(actions)
             states = self.normalise_state_vector(states)
@@ -196,12 +208,13 @@ class DataLoader:
         # |-----ncond-----||------------npred------------||
         # ^                ^                              ^
         # 0               t0                             t1
-        t0 = self.opt.ncond
-        t1 = T
         input_images  = images [:,   :t0].float().contiguous()
         input_states  = states [:,   :t0].float().contiguous()
         target_images = images [:, t0:t1].float().contiguous()
         target_states = states [:, t0:t1].float().contiguous()
+        if self.opt.object_space:
+            input_states  = raw_states[:,   :t0].float().contiguous()
+            target_states = raw_states[:, t0:t1].float().contiguous()
         target_costs  = costs  [:, t0:t1].float().contiguous()
         t0 -= 1; t1 -= 1
         actions       = actions[:, t0:t1].float().contiguous()
@@ -235,6 +248,9 @@ class DataLoader:
         # |                          car_size                       |  2          | tensor
         # +---------------------------------------------------------+             v
 
+        # When object_space is True, s is replaced by a `ncars x 9` tensor, where the 9 is
+        # x, y, length, width, dx, dy, vx, vy, in_frame
+
         return [input_images, input_states, ego_cars], actions, [target_images, target_states, target_costs], ids, sizes
 
     @staticmethod
@@ -251,6 +267,30 @@ class DataLoader:
         actions -= self.a_mean.view(1, 1, 2).expand(actions.size()).to(actions.device)
         actions /= (1e-8 + self.a_std.view(1, 1, 2).expand(actions.size())).to(actions.device)
         return actions
+
+
+def collate_raw_states(raw_states, reference_state_idx=0):
+    def filter_by(inds, values, func):
+        mask = func(inds, values)
+        return inds[mask], values[mask]
+
+    raw_states = [filter_by(torch.LongTensor(i), v, lambda _, vv: (vv[:, -1] == 1))
+                  for i, v in raw_states]
+    catind = torch.cat([x[0] for x in raw_states], dim=0)
+    minind = catind.min()
+    maxind = catind.max()
+    raw_states = [(i - minind, v.to(torch.float32)) for i, v in raw_states]
+    car2ind = torch.zeros(maxind-minind+1, dtype=torch.int64) - 1
+    reference_state = raw_states[reference_state_idx]
+    car2ind.scatter_(0, reference_state[0], torch.arange(reference_state[0].shape[0]))
+
+    collated_states = torch.zeros(len(raw_states), *(reference_state[1].shape))
+    for idx, (i, v) in enumerate(raw_states):
+        i = car2ind[i]
+        i, v = filter_by(i, v, lambda ii, vv: ii >= 0)
+        collated_states[idx].index_copy_(0, i, v)
+
+    return collated_states
 
 
 if __name__ == '__main__':

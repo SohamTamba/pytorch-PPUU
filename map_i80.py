@@ -12,6 +12,7 @@ import numpy as np
 import pdb, random
 import bisect
 import pdb, pickle, os, re
+from tqdm import tqdm
 
 # Conversion LANE_W from real world to pixels
 # A US highway lane width is 3.7 metres, here 50 pixels
@@ -30,8 +31,8 @@ class I80Car(Car):
     max_a = 40
     max_b = 0.01
 
-    def __init__(self, df, y_offset, look_ahead, screen_w, font=None, kernel=0, dt=1/10, is_circ_road=False):
-        #print(f"kernel = {kernel}")
+    def __init__(self, df, y_offset, look_ahead, screen_w, font=None, kernel=0, dt=1/10):
+        # XXXXX: Zeming says why doesn't this constructor inherit from Car? e.g. call super().__init__()???
         k = kernel  # running window size
         self._length = df.at[df.index[0], 'Vehicle Length'] * FOOT * SCALE
         self._width = df.at[df.index[0], 'Vehicle Width'] * FOOT * SCALE
@@ -59,6 +60,7 @@ class I80Car(Car):
         self._braked = False
         self.off_screen = self._max_t <= 0
         self._states = list()
+        self._raw_states = list()
         self._states_image = list()
         self._ego_car_image = None
         self._actions = list()
@@ -74,8 +76,6 @@ class I80Car(Car):
         self.is_controlled = False
         self._lane_list = df['Lane Identification'].values
         self.collisions_per_frame = 0
-
-        self.is_circ_road = is_circ_road
 
     @property
     def is_autonomous(self):
@@ -239,6 +239,7 @@ class I80(Simulator):
         self.episode = 0
         self.train_indx = None
         self.indx_order = None
+        self.pbar = None
 
     def _get_data_frame(self, time_slot, x_max, x_offset):
         if time_slot in self.cached_data_frames:
@@ -314,6 +315,10 @@ class I80(Simulator):
         self._t_slot = self._time_slots[time_slot] if time_slot is not None else self.random.choice(self._time_slots)
         self.df = self._get_data_frame(self._t_slot, self.screen_size[0], self.X_OFFSET)
         self.max_frame = max(self.df['Frame ID'])
+        if self.show_frame_count:
+            if self.pbar is not None:
+                self.pbar.close()
+            self.pbar = tqdm(total = self.max_frame)
         if vehicle_id: frame = self._get_first_frame(vehicle_id)
         if frame is None:  # controlled
             # Start at a random valid (new_vehicles is not empty) initial frame
@@ -374,19 +379,14 @@ class I80(Simulator):
                 car_df = df[this_vehicle & now_and_on]
                 if len(car_df) < self.smoothing_window + 1: continue
                 f = self.font[20] if self.display else None
-
-                #print(f"f = {f}")
-                #print(f"self.smoothing_window = {self.smoothing_window}")
-                car = self.EnvCar(car_df, self.offset, self.look_ahead, self.screen_size[0], font=f, kernel=self.smoothing_window,
-                                  dt=self.delta_t, is_circ_road=self.is_circ_road())
+                car = self.EnvCar(car_df, self.offset, self.look_ahead, self.screen_size[0], f, self.smoothing_window,
+                                  dt=self.delta_t)
                 self.vehicles.append(car)
                 if self.controlled_car and \
                         not self.controlled_car['locked'] and \
                         self.frame >= self.controlled_car['frame'] and \
                         (self.controlled_car['v_id'] is None or vehicle_id == self.controlled_car['v_id']):
                     self.controlled_car['locked'] = car
-
-                    car.reps = self.control_reps
                     car.is_controlled = True
                     car.buffer_size = self.nb_states
                     car.lanes = self.lanes
@@ -396,16 +396,15 @@ class I80(Simulator):
                     # print(f'Creating folder {self.dump_folder}')
                     # system(f'mkdir -p screen-dumps/{self.dump_folder}')
                     if self.store_sim_video:
-                        self.ghost = self.EnvCar(car_df, self.offset, self.look_ahead, self.screen_size[0], font=f,
-                                                 kernel=self.smoothing_window, dt=self.delta_t, is_circ_road=self.is_circ_road())
+                        self.ghost = self.EnvCar(car_df, self.offset, self.look_ahead, self.screen_size[0], f,
+                                                 self.smoothing_window, dt=self.delta_t)
             self.vehicles_history |= vehicles  # union set operation
 
         self.lane_occupancy = [[] for _ in range(7)]
         if self.show_frame_count:
-            print(f'\r[t={self.frame}]', end='')
+            self.pbar.update()
 
         for v in self.vehicles[:]:
-
             if v.off_screen:
                 # print(f'vehicle {v.id} [off screen]')
                 if self.state_image and self.store:
@@ -415,24 +414,15 @@ class I80(Simulator):
                 self.vehicles.remove(v)
             else:
                 # Insort it in my vehicle list
-
                 lane_idx = v.current_lane
-                
                 assert v.current_lane < self.nb_lanes, f'{v} is in lane {v.current_lane} at frame {self.frame}'
-
                 bisect.insort(self.lane_occupancy[lane_idx], v)
-
 
         if self.state_image or self.controlled_car and self.controlled_car['locked']:
             # How much to look far ahead
             look_ahead = MAX_SPEED * 1000 / 3600 * self.SCALE
             look_sideways = 2 * self.LANE_W
-            print("start rendering")
-            print(f"valid = {self.controlled_car['locked'].valid}")
-            print(f"back = {self.controlled_car['locked'].back[0]}")
-            print(f"look_ahead = {self.controlled_car['locked'].look_ahead}")
             self.render(mode='machine', width_height=(2 * look_ahead, 2 * look_sideways), scale=0.25)
-            print("stop rendering")
 
         for v in self.vehicles:
 
@@ -447,14 +437,9 @@ class I80(Simulator):
 
             # Sample an action based on the current state
             action = v.policy() if not v.is_autonomous else policy_action
-            if v.is_autonomous: #REMOVE
-                print(f"Loc = {v._position}")
 
             # Perform such action
             v.step(action)
-
-            # When extension + screen_length crossed, return to extension
-
 
             # Store state and action pair
             if (self.store or v.is_controlled) and v.valid:
@@ -579,6 +564,3 @@ class I80(Simulator):
 
             self._lane_surfaces[mode] = surface.copy()
             # pygame.image.save(surface, "i80-machine.png")
-
-    def is_circ_road(self):
-        return False

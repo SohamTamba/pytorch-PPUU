@@ -4,6 +4,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 import random, pdb, copy, os, math, numpy, copy, time
 import utils
+from utils import assert_shape
 
 
 ####################
@@ -92,6 +93,7 @@ class u_network(nn.Module):
             nn.Conv2d(self.opt.nfeature, self.opt.nfeature, 4, 2, 1),
             nn.Dropout2d(p=opt.dropout, inplace=True),
             nn.LeakyReLU(0.2, inplace=True),
+            # Zeming says: wtf this means the net doesn't even see every pixel? kernel 1 stride 2???
             nn.Conv2d(self.opt.nfeature, self.opt.nfeature, (4, 1), 2, 1)
         )
 
@@ -731,6 +733,243 @@ class FwdCNN_VAE(nn.Module):
             self.z_zero = self.z_zero.cpu()
 
 
+class Multiagent_u_net(nn.Module):
+    '''
+    This the u network should handle the entire receptive field, we just make it
+    one more layer...
+    '''
+    def __init__(self, opt):
+        super().__init__()
+        self.opt = opt
+        self.encoder = nn.Sequential(
+            nn.Conv2d(self.opt.nfeature, self.opt.nfeature, (7, 2), 2),
+            nn.Dropout2d(p=opt.dropout, inplace=True),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(self.opt.nfeature, self.opt.nfeature, (6, 2), 2),
+            nn.Dropout2d(p=opt.dropout, inplace=True),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(self.opt.nfeature, self.opt.nfeature, (4, 2), 2),
+        )
+
+        self.decoder = nn.Sequential(
+            nn.ConvTranspose2d(self.opt.nfeature, self.opt.nfeature, (4, 2), 2),
+            nn.Dropout2d(p=opt.dropout, inplace=True),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.ConvTranspose2d(self.opt.nfeature, self.opt.nfeature, (6, 2), 2),
+            nn.Dropout2d(p=opt.dropout, inplace=True),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.ConvTranspose2d(self.opt.nfeature, self.opt.nfeature, (7, 2), 2),
+            nn.Dropout2d(p=opt.dropout, inplace=True),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(self.opt.nfeature, self.opt.nfeature, 3, 1, 1)
+        )
+
+        assert(self.opt.layers == 3) # hardcoded sizes
+        assert(self.opt.height == 117)
+        assert(self.opt.width == 24)
+        self.hidden_size = self.opt.nfeature*12*3
+        self.fc = nn.Sequential(
+            nn.Linear(self.hidden_size, self.opt.nfeature),
+            nn.Dropout(p=opt.dropout, inplace=True),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Linear(self.opt.nfeature, self.hidden_size)
+        )
+
+    def forward(self, h):
+        h1 = self.encoder(h)
+        h2 = self.fc(h1.view(-1, self.hidden_size))
+        h2 = h2.view(h1.size())
+        h3 = self.decoder(h2)
+        assert h3.shape == h.shape
+        return h3
+
+
+class MultiagentFwdObj(nn.Module):
+    def __init__(self, opt):
+        super().__init__()
+        self.opt = opt
+        self.T = opt.ncond
+        self.B = opt.batch_size
+        self.nStates = 9
+        ichan = self.T * 3
+        schan = self.T * self.nStates
+        self.feature_maps = (opt.nfeature // 4, opt.nfeature // 2, opt.nfeature)
+        self.image_conv = nn.Sequential(
+                nn.Conv2d(ichan, opt.nfeature, 3, 1, 1),
+                nn.Dropout2d(p=opt.dropout, inplace=True),
+                nn.LeakyReLU(0.2, inplace=True),
+                nn.Conv2d(opt.nfeature, opt.nfeature, 3, 1, 1),
+                nn.Dropout2d(p=opt.dropout, inplace=True),
+                nn.LeakyReLU(0.2, inplace=True),
+                nn.Conv2d(opt.nfeature, opt.nfeature, 3, 1, 1),
+            )
+
+        self.agent_emb = nn.Sequential(
+            nn.Linear(schan, opt.nfeature),
+            nn.Dropout(p=opt.dropout, inplace=True),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Linear(opt.nfeature, opt.nfeature),
+            nn.Dropout(p=opt.dropout, inplace=True),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Linear(opt.nfeature, opt.nfeature)
+        )
+        self.matf_conv_trunk = nn.Sequential(
+            # The concatented features are probably very differing in norms
+            # So we first do a group norm before sending it to the u_network
+            nn.GroupNorm(2, opt.nfeature*2),
+            nn.Conv2d(2 * opt.nfeature, opt.nfeature, 1, 1), # MLP
+            nn.LeakyReLU(0.2, inplace=True),
+            Multiagent_u_net(opt)
+        )
+        self.matf_conv_img = nn.Sequential(
+            nn.Conv2d(opt.nfeature, opt.nfeature, 3, 1, 1),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(opt.nfeature, 3, 3, 1, 1),
+        )
+        self.matf_conv_agent = nn.Sequential(
+            nn.Conv2d(opt.nfeature, opt.nfeature, 3, 1, 1),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(opt.nfeature, opt.nfeature, 3, 1, 1),
+        )
+        self.agent_mlp = nn.Sequential(
+            nn.Linear(opt.nfeature, opt.nfeature),
+            nn.Dropout(p=opt.dropout, inplace=True),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Linear(opt.nfeature, opt.nfeature),
+            nn.Dropout(p=opt.dropout, inplace=True),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Linear(opt.nfeature, opt.nfeature)
+        )
+        self.trajectory_prediction = nn.Sequential(
+            nn.Linear(self.opt.nfeature, self.opt.nfeature),
+            nn.Dropout(p=opt.dropout, inplace=True),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Linear(self.opt.nfeature, self.opt.nfeature),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Linear(self.opt.nfeature, self.nStates)
+        )
+        self.z_linear = nn.Linear(opt.nz, 2 * opt.nfeature)
+
+    def forward(self, input_images, input_states, action, z):
+        B, T, nRGB, H, W = assert_shape(input_images, -1, -1, -1, -1, -1)
+        nCars, nStates = assert_shape(input_states, B, T, -1, -1)
+        nActions = assert_shape(action, B, T, -1)
+        assert_shape(z, B, self.opt.nz)
+
+        # Stack all timesteps together
+        images = input_images.reshape(B, -1, H, W)
+        # (B x nCars) x (T x nStates)
+        states = input_states.transpose(1, 2).reshape(-1, T * nStates)
+
+        # In the most recent timestep, which cars are in frame
+        last_frame_mask = input_states[:, -1, :, 8].unsqueeze(-1)
+        xy_locs = input_states[:, -1, :, 0:2].round()
+        # Get rid of all the invalid locations (fill them with -1)
+        xy_locs = xy_locs * last_frame_mask - (1 - last_frame_mask) 
+
+        image_emb = self.image_conv(images) # B x C x H x W
+        agent_emb = self.agent_emb(states).reshape(B, nCars, -1) # B x nCars x C
+        scattered = torch.cat([utils.scatter_sum_2d(xy_locs, agent_emb, input_images.shape[-2:]), image_emb], dim=1)
+
+        new_z = self.z_linear(z).reshape(B, 2 * self.opt.nfeature, 1, 1)
+        scattered += new_z
+
+        # Here, we scattered all the elements to the correct 2d locations, so we do a u-net conv trunk
+        trunk = self.matf_conv_trunk(scattered)
+        spatial = self.matf_conv_img(trunk)  # B x 3 x H x W
+        agent_res = self.agent_mlp(utils.gather_2d(xy_locs, self.matf_conv_agent(trunk)))
+
+        assert_shape(agent_res, *agent_emb.shape)
+        assert_shape(spatial, B, 3, H, W)
+        assert_shape(trunk, B, -1, H, W)
+
+        agent_emb += agent_res
+        agent_out = self.trajectory_prediction(agent_emb)
+
+        # XXX don't predict length, width, mask components, copy them in
+        # Some assertions to remind ourselves to catch mistakes if we make them:
+        assert_shape(agent_out, B, nCars, 9)
+        assert input_states[:, :, 0, 0].allclose(input_states.new_tensor(W/2, dtype=input_states.dtype)), "Location of ego car should be center of frame"
+        # TODO Why isn't this the case?
+        # assert input_states[:, :, 0, 1].allclose(input_states.new_tensor(H/2, dtype=input_states.dtype)), "Location of ego car should be center of frame"
+        assert input_states[:, :, 0, 8].allclose(input_states.new_tensor(1, dtype=input_states.dtype)), "Ego car should always be counted in mask"
+
+        # Actually, since we are predicting a difference, just never "move" the x, y, and mask
+        agent_out[:, :, 0].zero_()
+        agent_out[:, :, 1].zero_()
+        agent_out[:, :, 8].zero_()
+        # TODO: Draw the right boxes using the agent representation...
+        return spatial, agent_out
+
+
+class FwdObj(nn.Module):
+    def __init__(self, opt, mfile):
+        super().__init__()
+        self.opt = opt
+        assert mfile == '', "We don't support warm starts"
+        self.model = MultiagentFwdObj(opt)
+        torch.set_anomaly_enabled(True) # FIXME: delete when it works
+
+    # dummy function
+    def sample_z(self, bsize, method=None):
+        return torch.zeros(bsize, 32).cuda()
+
+    def forward_single_step(self, input_images, input_states, action, z):
+        # encode the inputs (without the action)
+        raise NotImplementedError("Fix this function")
+        bsize = input_images.size(0)
+        h_x = self.encoder(input_images, input_states)
+        h_x = h_x.view(bsize, self.opt.nfeature, self.opt.h_height, self.opt.h_width)
+        a_emb = self.a_encoder(action).view(h_x.size())
+
+        h = h_x
+        h = h + a_emb
+        h = h + self.u_network(h)
+        pred_image, pred_state = self.decoder(h)
+        pred_image = torch.sigmoid(pred_image + input_images[:, -1].unsqueeze(1))
+        pred_state = pred_state + input_states[:, -1]
+        return pred_image, pred_state
+
+    def forward(self, inputs, actions, target, sampling=None, z_dropout=None):
+        input_images, input_states = inputs
+        pred_images, pred_states = [], []
+        target_images, target_states, _ = target
+
+        B, Tseen, nRGB, H, W = assert_shape(input_images, -1, -1, -1, -1, -1)
+        nCars, nStates = assert_shape(input_states, B, Tseen, -1, -1)
+        Tpred, nActions = assert_shape(actions, B, -1, -1)
+        assert_shape(target_images, B, Tpred, nRGB, H, W)
+        assert_shape(target_states, B, Tpred, nCars, nStates)
+
+        # We run the model some number of times, hoping that dropout's enabled
+        # so we get different answers
+        for t in range(Tpred):
+            z = input_images.new_zeros(B, self.opt.nz)  # TODO FIX
+            pred_image, pred_state = self.model(input_images, input_states, actions, z)
+
+            pred_image = torch.sigmoid(pred_image + input_images[:, -1]).unsqueeze(1)
+            # since these are normalized, we are clamping to 6 standard deviations (if gaussian)
+#            pred_state = torch.clamp(pred_state + input_states[:, -1], min=-6, max=6)
+            pred_state = pred_state + input_states[:, -1]
+
+            input_images = torch.cat((input_images[:, 1:], pred_image), 1)
+            input_states = torch.cat((input_states[:, 1:], pred_state.unsqueeze(1)), 1)
+            pred_images.append(pred_image)
+            pred_states.append(pred_state)
+
+        pred_images = torch.cat(pred_images, 1)
+        pred_states = torch.stack(pred_states, 1)
+        return [pred_images, pred_states, None], torch.zeros(1).cuda()
+
+    def create_policy_net(self, opt):
+        raise NotImplementedError("Fix this function")
+        if opt.policy == 'policy-gauss':
+            self.policy_net = StochasticPolicy(opt)
+        if opt.policy == 'policy-ten':
+            self.policy_net = PolicyTEN(opt)
+        elif opt.policy == 'policy-vae':
+            self.policy_net = PolicyVAE(opt)
+
 
 
 #######################################
@@ -1022,3 +1261,8 @@ class PolicyMDN(nn.Module):
 
         return pi, mu, sigma, a
 
+MODEL_DICT = {
+    'fwd-cnn': FwdCNN,             # deterministic model
+    'fwd-cnn-vae-fp': FwdCNN_VAE,  # stochastic model
+    'fwd-obj': FwdObj,             # object based model
+}
