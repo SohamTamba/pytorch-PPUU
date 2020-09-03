@@ -100,11 +100,16 @@ if __name__ == '__main__':
         for safety_factor in [0.0, 0.33, 0.67, 1.0]:
             opt.safety_factor = safety_factor
             for seed in [1, 2, 3]:
-                print(f"Starting seed = {seed} | step = {step}")
-                opt.policy_model = unformatted_policy_net.format(seed=seed, step=step)
-                distance_travelled = _main(opt)
                 out_file = f"safety_factor={opt.safety_factor}-seed={seed}-step={step}.p"
                 out_path = os.path.join(out_dir, out_file)
+                if os.path.isfile(out_path):
+                    print(f"{out_path} already present.\nSkipping it", flush=True)
+                    continue
+
+                opt.policy_model = unformatted_policy_net.format(seed=seed, step=step)
+
+                print(f"Starting {out_path}", flush=True)
+                distance_travelled = _main(opt)
 
                 with open(out_path, 'wb') as f:
                     pickle.dump(distance_travelled, f)

@@ -283,6 +283,16 @@ def process_one_episode(opt,
             print("Iteration Limit Exceeded!\nTerminating Episode")
             break
         it += 1
+
+        # Memory Efficiency
+        c_car = env.controlled_car['locked']
+        if opt.no_write and  it > 120 and len(c_car._states_image) > 120:
+            c_car._states_image = c_car._states_image[-120:]
+            c_car._ego_car_image  = c_car._ego_car_image [-120:]
+            c_car._actions = c_car._actions[-120:]
+            c_car._states = c_car._states[-120:]
+
+
         input_images = inputs['context'].contiguous()
         input_states = inputs['state'].contiguous()
         if opt.save_grad_vid:
@@ -571,7 +581,8 @@ def _main(opt):
             f'mean success: {torch.Tensor(road_completed).mean():.3f}',
         ))
         #print(log_string)
-        utils.log(path.join(opt.save_dir, f'{plan_file}.log'), log_string)
+        if not opt.no_write:
+            utils.log(path.join(opt.save_dir, f'{plan_file}.log'), log_string)
 
         if writer is not None:
             # writer.add_video(
