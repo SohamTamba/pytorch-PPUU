@@ -74,6 +74,13 @@ def lane_cost(images, car_size):
     x_filter = (1 - torch.abs(torch.linspace(-1, 1, crop_h))) * crop_h / 2
 
     x_filter = x_filter.unsqueeze(0).expand(bsize * npred, crop_h).cuda()
+
+    # float by soham
+    min_x = min_x.float()
+    max_x = max_x.float()
+    min_y = min_y.float()
+    max_y = max_y.float()
+
     x_filter = torch.min(x_filter, max_x.view(bsize * npred, 1).expand(x_filter.size()))
     x_filter = (x_filter == max_x.unsqueeze(1).expand(x_filter.size())).float()
 
@@ -132,9 +139,15 @@ def proximity_cost(images, states, car_size=(6.4, 14.3), green_channel=1, unnorm
 
     x_filter = (1 - torch.abs(torch.linspace(-1, 1, crop_h))) * crop_h / 2
     x_filter = x_filter.unsqueeze(0).expand(bsize * npred, crop_h).cuda()
+
+    # float by soham
+    min_x = min_x.float()
+    max_x = max_x.float()
+    min_y = min_y.float()
+    max_y = max_y.float()
+    #breakpoint()
     x_filter = torch.min(x_filter, max_x.view(bsize * npred, 1).expand(x_filter.size()))
     x_filter = torch.max(x_filter, min_x.view(bsize * npred, 1))
-
     x_filter = (x_filter - min_x.view(bsize * npred, 1)) / (max_x - min_x).view(bsize * npred, 1)
     y_filter = (1 - torch.abs(torch.linspace(-1, 1, crop_w))) * crop_w / 2
     y_filter = y_filter.view(1, crop_w).expand(bsize * npred, crop_w).cuda()
@@ -527,6 +540,10 @@ def parse_command_line(parser=None):
     opt.h_height = 14
     opt.h_width = 3
     opt.hidden_size = opt.nfeature * opt.h_height * opt.h_width
+
+    # Hard coded by Soham
+    opt.model_dir = 'saved_models'
+    opt.mfile = 'model=fwd-cnn-vae-fp-layers=3-bsize=64-ncond=20-npred=20-lrt=0.0001-nfeature=256-dropout=0.1-nz=32-beta=1e-06-zdropout=0.5-gclip=5.0-warmstart=1-seed=1.step400000.model'
     return opt
 
 

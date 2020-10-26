@@ -13,6 +13,8 @@ import planning
 import utils
 from dataloader import DataLoader
 
+import pickle
+
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
@@ -45,7 +47,7 @@ if path.exists(model_path):
 elif path.exists(opt.mfile):
     model = torch.load(opt.mfile)
 else:
-    raise runtime_error(f'couldn\'t find file {opt.mfile}')
+    raise ValueError(f'couldn\'t find file {opt.mfile}')
 
 if not hasattr(model.encoder, 'n_channels'):
     model.encoder.n_channels = 3
@@ -86,9 +88,27 @@ model.opt.u_hinge = opt.u_hinge
 planning.estimate_uncertainty_stats(model, dataloader, n_batches=50, npred=opt.npred)
 model.eval()
 
+# By Soham
+train_diff_stats = dict(
+            max_a=[],
+            max_s=[],
+            median_a=[],
+            median_s=[],
+            mean_a=[],
+            mean_s=[],
+        )
+val_diff_stats = dict(
+            max_a=[],
+            max_s=[],
+            median_a=[],
+            median_s=[],
+            mean_a=[],
+            mean_s=[],
+        )
+
 
 def start(what, nbatches, npred):
-    train = True if what is 'train' else False
+    train = True if what == 'train' else False
     model.train()
     model.policy_net.train()
     n_updates, grad_norm = 0, 0
@@ -106,6 +126,13 @@ def start(what, nbatches, npred):
             model, inputs, targets, car_sizes, n_models=10, lrt_z=opt.lrt_z,
             n_updates_z=opt.z_updates, infer_z=opt.infer_z
         )
+
+        # By Soham
+        if train: out_dict = train_diff_stats
+        else: out_dict = val_diff_stats
+        for k in out_dict.keys():
+            out_dict[k].append(pred["diff_stats"][k])
+
         pred['policy'] = pred['proximity'] + \
                          opt.u_reg * pred['uncertainty'] + \
                          opt.lambda_l * pred['lane'] + \
@@ -185,8 +212,11 @@ for i in range(500):
     log_string = f'step {n_iter} | '
     log_string += 'train: [' + ', '.join(f'{k}: {train_losses[v]:.4f}' for k, v in losses.items()) + '] | '
     log_string += 'valid: [' + ', '.join(f'{k}: {valid_losses[v]:.4f}' for k, v in losses.items()) + ']'
-    print(log_string)
+    print(log_string, flush=True)
     utils.log(opt.model_file + '.log', log_string)
+
+    pickle.dump(train_diff_stats, open("saved_models/train_diff_stats.p", "wb"))
+    pickle.dump(val_diff_stats, open("saved_models/val_diff_stats.p", "wb"))
 
 if writer is not None:
     writer.close()

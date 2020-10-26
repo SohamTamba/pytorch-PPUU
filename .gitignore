@@ -19,3 +19,4 @@ __pycache__
 traffic-data
 *pkl
 Notebooks/.ipynb_checkpoints/
+*model

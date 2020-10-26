@@ -267,6 +267,14 @@ def plan_actions_backprop(model, input_images, input_states, car_sizes, npred=50
 
 def train_policy_net_mpur(model, inputs, targets, car_sizes, n_models=10, sampling_method='fp', lrt_z=0.1,
                           n_updates_z=10, infer_z=False):
+
+    # Thresh by Soham
+    def threshhold_image(img, eps):
+        img = img.clone().detach()
+        img[ img < eps] = 0
+        img[img > 1-eps] = 1
+        return img
+
     input_images_orig, input_states_orig, input_ego_car_orig = inputs
     target_images, target_states, target_costs = targets
     ego_car_new_shape = [*input_images_orig.shape]
@@ -278,6 +286,7 @@ def train_policy_net_mpur(model, inputs, targets, car_sizes, n_models=10, sampli
     bsize = input_images.size(0)
     npred = target_images.size(1)
     pred_images, pred_states, pred_costs, pred_actions = [], [], [], []
+    pred_thresh_actions = []
 
     # total_ploss = torch.zeros(1).cuda()
     # Sample latent variables from a (fixed) prior
@@ -288,6 +297,10 @@ def train_policy_net_mpur(model, inputs, targets, car_sizes, n_models=10, sampli
     model.eval()
     for t in range(npred):
         actions, _, _, _ = model.policy_net(input_images, input_states)
+
+        thresh_input_images = threshhold_image(input_images, 0.1)
+        thresh_actions, _, _, _ = model.policy_net(thresh_input_images, input_states)
+
         if infer_z:
             h_x = model.encoder(input_images, input_states)
             h_y = model.y_encoder(target_images[:, t].unsqueeze(1).contiguous())
@@ -305,10 +318,12 @@ def train_policy_net_mpur(model, inputs, targets, car_sizes, n_models=10, sampli
         pred_images.append(pred_image)
         pred_states.append(pred_state)
         pred_actions.append(actions)
+        pred_thresh_actions.append(thresh_actions)
 
     pred_images = torch.cat(pred_images, 1)
     pred_states = torch.stack(pred_states, 1)
     pred_actions = torch.stack(pred_actions, 1)
+    pred_thresh_actions = torch.stack(pred_thresh_actions, 1)
 
     input_images = input_images_orig.clone()
     input_states = input_states_orig.clone()
@@ -374,6 +389,27 @@ def train_policy_net_mpur(model, inputs, targets, car_sizes, n_models=10, sampli
     loss_a = pred_actions.norm(2, 2).pow(2).mean()
 
     pred_images = pred_images[:, :, :3]
+
+    # By Soham
+    with torch.no_grad():
+        diff_a = torch.abs( pred_actions[:, :, 0] - pred_thresh_actions[:, :, 0] ).cpu().numpy()
+        diff_s = torch.abs( pred_actions[:, :, 1] - pred_thresh_actions[:, :, 1] ).cpu().numpy()
+
+        max_a = numpy.max(diff_a)
+        max_s = numpy.max(diff_s)
+        median_a = numpy.median(diff_a)
+        median_s = numpy.median(diff_s)
+        mean_a = numpy.mean(diff_a)
+        mean_s = numpy.mean(diff_s)
+        diff_stats = dict(
+            max_a=max_a,
+            max_s=max_s,
+            median_a=median_a,
+            median_s=median_s,
+            mean_a=mean_a,
+            mean_s=mean_s,
+        )
+
     predictions = dict(
         state_img=(pred_images + input_ego_car_orig[:, None].expand_as(pred_images)).clamp(max=1.),
         state_vct=pred_states,
@@ -382,6 +418,7 @@ def train_policy_net_mpur(model, inputs, targets, car_sizes, n_models=10, sampli
         offroad=offroad_cost,
         uncertainty=total_u_loss,
         action=loss_a,
+        diff_stats=diff_stats
     )
 
     return predictions, pred_actions
@@ -412,6 +449,7 @@ def get_grad_vid(model, input_images, input_states, car_sizes, device='cuda'):
 
 
 def train_policy_net_mper(model, inputs, targets, targetprop=0, dropout=0.0, n_models=10, model_type='vae'):
+
     input_images, input_states = inputs
     target_images, target_states, target_costs = targets
     bsize = input_images.size(0)

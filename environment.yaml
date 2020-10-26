@@ -1,4 +1,4 @@
-name: PPUU
+name: PPUU_FW
 channels:
   - pytorch
   - defaults
@@ -6,7 +6,7 @@ dependencies:
   - imageio
   - pandas
   - python=3.8
-  - pytorch>1.2.0
+  - pytorch=1.5.1
   - scipy
   - matplotlib
   - pip
