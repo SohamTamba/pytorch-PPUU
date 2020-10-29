@@ -1,0 +1,19 @@
+Table illustrates the effect of threshholding the world model output during policy training (cutoff = 0.1)
+and using Nearest Neighbour to downsample the evaluation input image instead of billinear
+
+--------------------------------------------------------------------
+   | Train Steps  | Downsampling | W/O Threshhold | W/ Threshhold
+---|--------------|--------------|----------------|-----------------
+ 1 | 45000        | Billinear    | 71.5%          | 77.2%
+ 2 | 45000        | Nearest      | 70.1%          | 70.2%
+ 3 | 50000        | Billinear    | 74.0%          | 75.2%
+ 4 | 50000        | Nearest      | 67.4%          | 67.4%
+ 5 | 70000        | Billinear    | 72.9%          | 74.3%
+ 6 | 70000        | Nearest      | 59.9%          | 74.9%
+---------------------------------------------------------------------
+
+Discussion:
+1. Threshholding seems to improve performance.
+2. Regarding entry #6, the original model faced a large drop in performance on using Nearest downsampling.
+Is it possible that after training for too long, the policy relies on soft pixels at the edge of the cars with
+high gradient (pixel = 0.5) to choose its action instead of the hard pixels (pixel = 1.0) interior to the car?ex

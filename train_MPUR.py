@@ -23,7 +23,6 @@ torch.backends.cudnn.benchmark = False
 #################################################
 
 opt = utils.parse_command_line()
-
 # Create file_name
 opt.model_file = path.join(opt.model_dir, 'policy_networks', 'MPUR-' + opt.policy)
 utils.build_model_file_name(opt)
@@ -124,15 +123,15 @@ def start(what, nbatches, npred):
         inputs, actions, targets, ids, car_sizes = dataloader.get_batch_fm(what, npred)
         pred, actions = planning.train_policy_net_mpur(
             model, inputs, targets, car_sizes, n_models=10, lrt_z=opt.lrt_z,
-            n_updates_z=opt.z_updates, infer_z=opt.infer_z
+            n_updates_z=opt.z_updates, infer_z=opt.infer_z, threshhold_fm=opt.threshhold_fm
         )
 
         # By Soham
-        if train: out_dict = train_diff_stats
+        '''if train: out_dict = train_diff_stats
         else: out_dict = val_diff_stats
         for k in out_dict.keys():
             out_dict[k].append(pred["diff_stats"][k])
-
+        '''
         pred['policy'] = pred['proximity'] + \
                          opt.u_reg * pred['uncertainty'] + \
                          opt.lambda_l * pred['lane'] + \
@@ -166,7 +165,7 @@ def start(what, nbatches, npred):
     return total_losses
 
 
-print('[training]')
+print('[training]', flush=True)
 utils.log(opt.model_file + '.log', f'[job name: {opt.model_file}]')
 n_iter = 0
 losses = OrderedDict(
@@ -200,12 +199,14 @@ for i in range(500):
         n_iter=n_iter,
     ), opt.model_file + '.model')
     if (n_iter / opt.epoch_size) % 10 == 0:
+        print("Saving Model", flush=True)
         torch.save(dict(
             model=model,
             optimizer=optimizer.state_dict(),
             opt=opt,
             n_iter=n_iter,
         ), opt.model_file + f'step{n_iter}.model')
+        print("Saved")
 
     model.to(opt.device)
 
@@ -215,8 +216,8 @@ for i in range(500):
     print(log_string, flush=True)
     utils.log(opt.model_file + '.log', log_string)
 
-    pickle.dump(train_diff_stats, open("saved_models/train_diff_stats.p", "wb"))
-    pickle.dump(val_diff_stats, open("saved_models/val_diff_stats.p", "wb"))
+    '''pickle.dump(train_diff_stats, open("saved_models/train_diff_stats.p", "wb"))
+    pickle.dump(val_diff_stats, open("saved_models/val_diff_stats.p", "wb"))'''
 
 if writer is not None:
     writer.close()

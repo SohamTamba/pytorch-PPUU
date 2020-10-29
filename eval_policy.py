@@ -91,6 +91,7 @@ def load_models(opt, data_path, device='cuda'):
         forward_model.policy_net.stats = stats
         forward_model.policy_net.actor_critic = False
     if opt.method == 'policy-MPUR':
+        print(f"Loading policy {model_path}", flush=True)
         checkpoint = torch.load(model_path)
         policy_network_mpur = checkpoint['model']
         policy_network_mpur.stats = stats
@@ -234,6 +235,11 @@ def parse_args():
     opt.h_width = 3
     opt.opt_z = (opt.opt_z == 1)
     opt.opt_a = (opt.opt_a == 1)
+
+    # Hard coded by Soham
+    opt.mfile = 'model=fwd-cnn-vae-fp-layers=3-bsize=64-ncond=20-npred=20-lrt=0.0001-nfeature=256-dropout=0.1-nz=32-beta=1e-06-zdropout=0.5-gclip=5.0-warmstart=1-seed=1.step400000.model'
+    opt.model_dir = 'saved_models'
+    opt.method ='policy-MPUR'
 
     if opt.num_processes == -1:
         opt.num_processes = get_optimal_pool_size()
@@ -510,6 +516,17 @@ def main():
                     dataloader.car_sizes[sorted(list(dataloader.car_sizes.keys()))[
                         timeslot]][car_id]
                 )[None, :]
+        '''process_one_episode(
+            opt,
+            env,
+            car_path,
+            forward_model,
+            policy_network_il,
+            data_stats,
+            plan_file,
+            j,
+            car_sizes
+        )'''
         async_results.append(
             pool.apply_async(
                 process_one_episode, (
@@ -527,6 +544,7 @@ def main():
         )
 
     for j in range(n_test):
+        if j%(n_test//10) == 0: print(f"COMPLETED {j}/{n_test}")
         simulation_result = async_results[j].get()
 
         time_travelled.append(simulation_result.time_travelled)
@@ -571,6 +589,7 @@ def main():
 
     diff_time = time.time() - time_started
     print('avg time travelled per second is', total_images / diff_time)
+    print(f"FINISHED {opt.policy_model}")
 
     torch.save(action_sequences, path.join(
         opt.save_dir, f'{plan_file}.actions'))

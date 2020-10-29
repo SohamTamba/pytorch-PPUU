@@ -531,6 +531,9 @@ def parse_command_line(parser=None):
     parser.add_argument('-tensorboard_dir', type=str, default='models/policy_networks',
                         help='path to the directory where to save tensorboard log. If passed empty path' \
                              ' no logs are saved.')
+    # By Soham
+    parser.add_argument('--threshhold_fm', action='store_true',
+                    help='Apply Thresholding to FM output while training policy.')
 
     opt = parser.parse_args()
     opt.n_inputs = 4
@@ -548,6 +551,7 @@ def parse_command_line(parser=None):
 
 
 def build_model_file_name(opt):
+    opt.model_file += f'-threshhold_fm={opt.threshhold_fm}'
     if 'vae' in opt.mfile:
         opt.model_file += f'-model=vae'
     if 'zdropout=0.5' in opt.mfile:
