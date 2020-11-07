@@ -537,9 +537,11 @@ class Car:
         # -> (n × state_image, n × lane_cost, n × proximity_cost, n × frame)
         transpose = list(zip(*self._states_image))
         state_images = transpose[0]
+
         state_images = torch.stack(state_images).permute(0, 3, 1, 2)[-n:]
         ego_car_new_shape = list(state_images.shape)
         ego_car_new_shape[1] = 1
+
         ego_car_channel = self._ego_car_image[:, :, 2][None, None, :].expand(ego_car_new_shape)
         state_images = torch.cat((state_images, ego_car_channel), 1)
 

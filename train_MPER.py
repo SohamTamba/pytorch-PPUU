@@ -61,6 +61,11 @@ parser.add_argument('-tensorboard_dir', type=str, default='models/policy_network
                          ' no logs are saved.')
 opt = parser.parse_args()
 
+# HARD CODING
+opt.model_dir = "../../models_v14/"
+opt.mfile = 'model=fwd-cnn-vae-fp-layers=3-bsize=64-ncond=20-npred=20-lrt=0.0001-nfeature=256-dropout=0.1-nz=32-beta=1e-06-zdropout=0.5-gclip=5.0-warmstart=1-seed=1.step400000.model'
+
+
 opt.n_inputs = 4
 opt.n_actions = 2
 opt.height = 117
@@ -112,9 +117,9 @@ else:
     # load the model
     model = torch.load(opt.model_dir + opt.mfile)
     if type(model) is dict: model = model['model']
-    model.create_policy_net(opt)
+    #model.create_policy_net(opt)
     model.opt.actions_subsample = opt.actions_subsample
-    optimizer = optim.Adam(model.policy_net.parameters(), opt.lrt)
+    #optimizer = optim.Adam(model.policy_net.parameters(), opt.lrt)
     n_iter = 0
 #    stats = torch.load('/misc/vlgscratch4/LecunGroup/nvidia-collab/traffic-data-atcold/data_i80_v0/data_stats.pth')
 #    model.stats=stats
@@ -156,12 +161,17 @@ def compute_loss(targets, predictions, gamma=1.0, r=True):
 def train(nbatches, npred):
     gamma_mask = torch.Tensor([opt.gamma**t for t in range(npred)]).view(1, -1).cuda()
     model.eval()
-    model.policy_net.train()
+    #model.policy_net.train()
     total_loss_i, total_loss_s, total_loss_c, total_loss_policy, total_loss_p, n_updates = 0, 0, 0, 0, 0, 0
     for i in range(nbatches):
-        optimizer.zero_grad()
+        #optimizer.zero_grad()
         inputs, actions, targets, _, _ = dataloader.get_batch_fm('train', npred)
         pred, _ = planning.train_policy_net_mper(model, inputs, targets, dropout=opt.p_dropout, model_type=model_type)
+
+        print(pred["state_img"].shape)
+        assert False
+
+
         loss_i, loss_s, loss_c_, loss_p = compute_loss(targets, pred)
 #        proximity_cost, lane_cost = pred[2][:, :, 0], pred[2][:, :, 1]
 #        proximity_cost = proximity_cost * gamma_mask

@@ -21,6 +21,7 @@ from dataloader import DataLoader
 from imageio import imwrite
 import time
 
+import pickle
 from torch.multiprocessing import Pool, set_start_method
 
 #torch.multiprocessing.set_sharing_strategy('file_system')
@@ -201,7 +202,6 @@ def parse_args():
     parser.add_argument('-debug', action='store_true', help=' ')
     parser.add_argument('-circular_track', action='store_true', help=' ')
     parser.add_argument('-safety_factor', default=0.0, help='Ratio of Safety Dim to View Dim')
-    parser.add_argument('-', action='store_true', help=' ')
     parser.add_argument('-model_dir', type=str, default='models/', help=' ')
     M1 = 'model=fwd-cnn-vae-fp-layers=3-bsize=64-ncond=20-npred=20-lrt=0.0001-nfeature=256-dropout=0.1-nz=32-' + \
          'beta=1e-06-zdropout=0.5-gclip=5.0-warmstart=1-seed=1.step200000.model'
@@ -231,7 +231,7 @@ def parse_args():
                         action='store_true',
                         help='save gradients wrt states')
 
-    parser.add_argument('-no_write', action='stores_true')
+    parser.add_argument('--no_write', action='store_true')
 
     opt = parser.parse_args()
     opt.save_dir = path.join(opt.model_dir, 'planning_results')
@@ -241,6 +241,12 @@ def parse_args():
     opt.h_width = 3
     opt.opt_z = (opt.opt_z == 1)
     opt.opt_a = (opt.opt_a == 1)
+
+    ################
+    opt.mfile = 'model=fwd-cnn-vae-fp-layers=3-bsize=64-ncond=20-npred=20-lrt=0.0001-nfeature=256-dropout=0.1-nz=32-' + \
+             'beta=1e-06-zdropout=0.5-gclip=5.0-warmstart=1-seed=1.step400000.model'
+    opt.model_dir = '/misc/vlgscratch4/LecunGroup/nvidia-collab/models_v14'
+    opt.method == 'bprop'
 
     if opt.num_processes == -1:
         opt.num_processes = get_optimal_pool_size()
@@ -286,11 +292,11 @@ def process_one_episode(opt,
 
         # Memory Efficiency
         c_car = env.controlled_car['locked']
-        if opt.no_write and  it > 120 and len(c_car._states_image) > 120:
-            c_car._states_image = c_car._states_image[-120:]
-            c_car._ego_car_image  = c_car._ego_car_image [-120:]
-            c_car._actions = c_car._actions[-120:]
-            c_car._states = c_car._states[-120:]
+        num_remain = 200
+        if opt.no_write and  it > num_remain and len(c_car._states_image) > num_remain:
+            c_car._states_image = c_car._states_image[-num_remain:]
+            c_car._actions = c_car._actions[-num_remain:]
+            c_car._states = c_car._states[-num_remain:]
 
 
         input_images = inputs['context'].contiguous()
@@ -306,7 +312,8 @@ def process_one_episode(opt,
         elif opt.method == 'bprop':
             # TODO: car size is provided by the dataloader!! This lines below should be removed!
             # TODO: Namely, dataloader.car_sizes[timeslot][car_id]
-            a = planning.plan_actions_backprop(
+            ################
+            im = planning.plan_actions_backprop(
                 forward_model,
                 input_images[:, :3, :, :].contiguous(),
                 input_states,
@@ -324,6 +331,9 @@ def process_one_episode(opt,
                 lambda_l=opt.lambda_l,
                 lambda_o=opt.lambda_o
             )
+            pickle.dump(im[-1, -1, :, :, :], open("predicted_img.p", "wb"))
+            pickle.dump(input_images[-1, :3, :, :], open("real_img.p", "wb"))
+            assert False
         elif opt.method == 'policy-IL':
             _, _, _, a = policy_network_il(
                 input_images,
@@ -584,7 +594,7 @@ def _main(opt):
         if not opt.no_write:
             utils.log(path.join(opt.save_dir, f'{plan_file}.log'), log_string)
 
-        if writer is not None:
+        if not opt.no_write and writer is not None:
             # writer.add_video(
             #     f'Video/success={simulation_result.road_completed:d}_{j}',
             #     simulation_result.images.unsqueeze(0),
@@ -615,7 +625,7 @@ def _main(opt):
         writer.close()
 
     #print(distance_travelled)
-    return distance_travelled
+    return distance_travelled, time_travelled
 
 
 def main():

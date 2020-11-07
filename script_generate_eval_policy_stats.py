@@ -90,9 +90,13 @@ if __name__ == '__main__':
         "-lambdaa=0.0-gamma=0.99-lrtz=0.0-updatez=0-inferz=False-learnedcost=False-seed={seed}-novaluestep{step}.model"
 
     out_dir = "dist-stats"
+    time_dir = "time-stats"
+    torch.cuda.empty_cache()
 
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
+    if not os.path.exists(time_dir):
+        os.makedirs(time_dir)
 
     break_after_one = args.local or args.one_exec
 
@@ -109,10 +113,14 @@ if __name__ == '__main__':
                 opt.policy_model = unformatted_policy_net.format(seed=seed, step=step)
 
                 print(f"Starting {out_path}", flush=True)
-                distance_travelled = _main(opt)
+                distance_travelled, time_travelled = _main(opt)
 
                 with open(out_path, 'wb') as f:
                     pickle.dump(distance_travelled, f)
+
+                time_path = os.path.join(time_dir, out_file)
+                with open(time_path, 'wb') as f:
+                    pickle.dump(time_travelled, f)
 
                 print(f"Saved file: {out_path}")
                 if break_after_one:
